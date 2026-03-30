@@ -34,9 +34,9 @@
   --fs-md:   1.05rem;   /* 16.8px */
   --fs-lg:   1.2rem;    /* 19.2px */
   --fs-xl:   1.5rem;    /* 24px   */
-  --fs-2xl:  clamp(1.5rem, 3vw, 2rem);
-  --fs-3xl:  clamp(1.8rem, 4vw, 2.8rem);
-  --fs-hero: clamp(2rem, 5vw, 3.5rem);
+  --fs-2xl:  clamp(1.25rem, 2.5vw, 2rem); /* 20px → 32px */
+  --fs-3xl:  clamp(1.5rem, 3.5vw, 2.8rem); /* 24px → 44.8px */
+  --fs-hero: clamp(1.8rem, 5vw, 3.5rem);   /* 28.8px → 56px */
 
   /* ── Spacing ── */
   --space-xs:  4px;
@@ -72,11 +72,15 @@
   /* ── Layout ── */
   --max-width:     1200px;
   --max-width-narrow: 960px;
-  --header-height: 60px;
-  --section-padding: clamp(60px, 8vw, 100px) 24px;
+  --header-height: 72px; /* Increased for better desktop feel */
+  --section-padding: clamp(80px, 10vw, 120px) 24px;
 }
 
 /* ── Global Reset ── */
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
   font-family: var(--font-primary);
@@ -85,8 +89,47 @@ body {
   background: var(--color-bg);
   color: var(--color-text);
   font-size: var(--fs-base);
-  line-height: 1.5;
+  line-height: 1.6; /* Improved for readability */
 }
+
+/* ── Typography & Text Wrapping ── */
+p, h1, h2, h3, h4, h5, h6, li, span, div {
+  word-break: keep-all; /* Korean words don't break in middle */
+  overflow-wrap: break-word; /* Long English/Technical words wrap */
+  text-wrap: pretty; /* Smarter line breaking */
+}
+
+/* ── Animations ── */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-delayed {
+  transition-delay: 0.2s;
+}
+
+.reveal-stagger-1 { transition-delay: 0.1s; }
+.reveal-stagger-2 { transition-delay: 0.2s; }
+.reveal-stagger-3 { transition-delay: 0.3s; }
+.reveal-stagger-4 { transition-delay: 0.4s; }
 
 #root {
   min-height: 100svh;

@@ -4,6 +4,7 @@ import { useLanguage } from '../context/LanguageContext'
 import { usePageMeta } from '../hooks/usePageMeta'
 import { translations } from '../i18n/translations'
 import { platformData } from '../data/productContent'
+import RegulatoryBanner from '../components/RegulatoryBanner'
 import styles from './PlatformPage.module.css'
 
 export default function PlatformPage() {
@@ -21,6 +22,7 @@ export default function PlatformPage() {
 
   return (
     <div className={styles.page}>
+      <RegulatoryBanner />
       {/* Video Intro Hero */}
       <section className={styles.videoHero}>
         <video

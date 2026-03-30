@@ -4,6 +4,7 @@ import { useLanguage } from '../context/LanguageContext'
 import { usePageMeta } from '../hooks/usePageMeta'
 import { productContent, platformData } from '../data/productContent'
 import { translations } from '../i18n/translations'
+import RegulatoryBanner from '../components/RegulatoryBanner'
 import styles from './AIProductsPage.module.css'
 
 const tabOrder = [
@@ -58,18 +59,10 @@ export default function AIProductsPage() {
 
   return (
     <div className={styles.page}>
+      <RegulatoryBanner />
       {/* Page Header */}
       <section className={styles.hero}>
         <h1>{kr ? 'AI 제품 포트폴리오' : 'AI Product Portfolio'}</h1>
-        {/* Regulatory Notice — inside hero */}
-        <div className={styles.regulatoryBanner}>
-          <span className={styles.regulatoryLabel}>
-            {translations[lang].footer.regulatoryTitle}
-          </span>
-          <p className={styles.regulatoryText}>
-            {translations[lang].footer.regulatoryText}
-          </p>
-        </div>
       </section>
 
       {/* Tab Navigation */}

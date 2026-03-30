@@ -38,23 +38,99 @@ export default function Hero({ t }) {
       100% { opacity: 0; }
     }
 
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+      40% {transform: translateY(-10px);}
+      60% {transform: translateY(-5px);}
+    }
+
     .rotating-term {
       display: inline-block;
       animation: fadeInOut 2.3s ease-in-out;
     }
 
+    .scroll-indicator {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255,255,255,0.4);
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      animation: bounce 2s infinite;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .scroll-indicator:hover {
+      color: var(--color-accent);
+    }
+
+    .scroll-indicator span {
+      width: 1px;
+      height: 40px;
+      background: currentColor;
+    }
+
+    @keyframes fadeInHero {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-content-inner {
+      animation: fadeInHero 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    .hero-video-bg {
+      display: none;
+    }
+
     @media (max-width: 768px) {
       .hero-section {
-        height: 80vh !important; /* 모바일에서는 높이를 조금 줄여서 비디오가 덜 잘리게 함 */
-        min-height: 400px !important;
+        height: 100vh !important;
+        min-height: 500px !important;
+      }
+      .hero-video-bg {
+        display: block !important;
+        opacity: 1 !important;
+        object-fit: cover !important;
+        filter: blur(20px) brightness(0.3) !important;
+        transform: scale(1.1);
+      }
+      .hero-video-main {
+        object-fit: cover !important; /* contain에서 cover로 변경하여 화면을 꽉 채움 */
+        height: 100% !important;
+        width: 100% !important;
+        background: transparent !important;
+        opacity: 0.8 !important; /* 배경 영상과 조화를 위해 약간 투명도 조절 */
       }
       .hero-content {
         padding: 0 20px !important;
+        background: radial-gradient(circle, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 100%) !important;
+        justify-content: center !important;
       }
       .hero-subtitle {
-        font-size: 1.1rem !important;
-        line-height: 1.5 !important;
-        word-break: keep-all;
+        font-size: clamp(1.2rem, 5vw, 1.6rem) !important;
+        line-height: 1.4 !important;
+        font-weight: 800 !important;
+        margin-bottom: 24px !important;
+        text-shadow: 0 2px 15px rgba(0,0,0,0.8);
+      }
+      .scroll-indicator {
+        bottom: 20px;
+      }
+      .scroll-indicator span {
+        height: 30px;
+      }
+      .hero-cta {
+        padding: 12px 32px !important;
+        font-size: 15px !important;
+        margin-top: 24px !important;
       }
     }
   `
@@ -65,30 +141,39 @@ export default function Hero({ t }) {
       style={{
         position: 'relative',
         height: '100vh',
-        minHeight: 500,
+        minHeight: 600,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        overflow: 'hidden'
       }}
     >
       <style>{fadeStyles}</style>
 
+      {/* Background layer for mobile (blurred fill) */}
       <video
-        autoPlay
-        muted
-        loop
-        playsInline
+        autoPlay muted loop playsInline
+        className="hero-video-bg"
         style={{
-          position: 'absolute',
-          inset: 0,
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          objectPosition: 'center', /* 비디오 중앙 정렬 */
+          position: 'absolute', inset: 0, width: '100%', height: '100%',
+          objectFit: 'cover', objectPosition: 'center', zIndex: 0,
         }}
       >
         <source src="/video/intro.mov" type="video/mp4" />
       </video>
+
+      {/* Main video layer */}
+      <video
+        autoPlay muted loop playsInline
+        className="hero-video-main"
+        style={{
+          position: 'absolute', inset: 0, width: '100%', height: '100%',
+          objectFit: 'cover', objectPosition: 'center', zIndex: 1,
+        }}
+      >
+        <source src="/video/intro.mov" type="video/mp4" />
+      </video>
+
       <div
         className="hero-content"
         style={{
@@ -99,79 +184,74 @@ export default function Hero({ t }) {
           alignItems: 'center',
           justifyContent: 'center',
           textAlign: 'center',
-          background: 'rgba(0,0,0,0.35)',
+          background: 'transparent', // Gradient is moved to media query
           padding: '0 24px',
+          zIndex: 2
         }}
       >
-        {/* Rotating Disease Terms */}
-        <div
-          style={{
-            minHeight: '2.6em',
-            marginBottom: 16,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <span
-            className="rotating-term"
+        <div className="hero-content-inner" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          {/* Rotating Disease Terms */}
+          <div
             style={{
-              fontSize: 'clamp(0.9rem, 1.8vw, 1.2rem)',
-              color: 'rgb(0,255,204)',
-              fontWeight: 600,
-              letterSpacing: '0.08em',
-              textTransform: 'uppercase',
+              minHeight: '2.6em',
+              marginBottom: 12,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
           >
-            {currentTerm}
-          </span>
+            <span
+              className="rotating-term"
+              style={{
+                fontSize: 'clamp(1rem, 2vw, 1.4rem)',
+                color: 'var(--color-accent)',
+                fontWeight: 700,
+                letterSpacing: '0.1em',
+                textTransform: 'uppercase',
+                textShadow: '0 0 20px rgba(0,255,204,0.4)'
+              }}
+            >
+              {currentTerm}
+            </span>
+          </div>
+
+          {/* Subtitle */}
+          <h2
+            className="hero-subtitle"
+            style={{
+              fontSize: 'clamp(1.4rem, 4vw, 2.8rem)',
+              color: '#fff',
+              fontWeight: 800,
+              letterSpacing: '-0.02em',
+              maxWidth: 800,
+              lineHeight: 1.2,
+              margin: '0 0 24px',
+              wordBreak: 'keep-all',
+              textShadow: '0 2px 20px rgba(0,0,0,0.5)'
+            }}
+          >
+            {t.subtitle}
+          </h2>
+
+          {/* CTA Button */}
+          <button
+            onClick={() => navigate('/contact')}
+            className="btn btn-primary hero-cta"
+            style={{
+              marginTop: 16,
+              padding: '16px 48px',
+              fontSize: 16,
+              borderRadius: 8
+            }}
+          >
+            {t.cta}
+          </button>
         </div>
+      </div>
 
-        {/* Subtitle */}
-        <p
-          className="hero-subtitle"
-          style={{
-            fontSize: 'clamp(1rem, 2vw, 1.3rem)',
-            color: 'rgba(255,255,255,0.75)',
-            letterSpacing: '0.04em',
-            maxWidth: 600,
-            lineHeight: 1.6,
-            margin: 0,
-            wordBreak: 'keep-all',
-          }}
-        >
-          {t.subtitle}
-        </p>
-
-        {/* CTA Button */}
-        <button
-          onClick={() => navigate('/contact')}
-          style={{
-            marginTop: 32,
-            padding: '18px 52px',
-            fontSize: 16,
-            fontWeight: 700,
-            letterSpacing: '0.08em',
-            color: '#060a0e',
-            background: 'rgb(0,255,204)',
-            border: 'none',
-            borderRadius: 4,
-            cursor: 'pointer',
-            transition: 'all 0.25s ease',
-            boxShadow: '0 0 24px rgba(0,255,204,0.3)',
-          }}
-          onMouseEnter={e => {
-            e.target.style.background = '#fff'
-            e.target.style.boxShadow = '0 0 32px rgba(255,255,255,0.3)'
-          }}
-          onMouseLeave={e => {
-            e.target.style.background = 'rgb(0,255,204)'
-            e.target.style.boxShadow = '0 0 24px rgba(0,255,204,0.3)'
-          }}
-        >
-          {t.cta}
-        </button>
-
+      <div className="scroll-indicator" onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}>
+        <span></span>
+        SCROLL
       </div>
     </section>
   )

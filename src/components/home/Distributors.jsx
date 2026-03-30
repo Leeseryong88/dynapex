@@ -105,7 +105,7 @@ export default function Distributors({ t }) {
                     <p key={i} style={{ margin: '6px 0' }}>
                       <span style={{ color: 'var(--color-text-subtle)', fontWeight: 600, fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>{label}:</span>
                       <br />
-                      <span>{value}</span>
+                      <span style={{ wordBreak: 'break-all' }}>{value}</span>
                     </p>
                   )
                 })}

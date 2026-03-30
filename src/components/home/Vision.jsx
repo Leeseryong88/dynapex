@@ -44,20 +44,27 @@ export default function Vision({ t, boardT, autoAnimate = false, lang = 'en' }) 
       }
       .vision-mission-grid {
         grid-template-columns: 1fr !important;
-        gap: 20px !important;
+        gap: 16px !important;
+        padding: 0 8px !important;
       }
       .dynamic-title-wrap {
-        flex-direction: column !important;
-        align-items: center !important;
-        margin-bottom: 32px !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        gap: 0 8px !important;
+        margin-bottom: 40px !important;
       }
       .dynamic-title-part {
-        font-size: clamp(20px, 6vw, 32px) !important;
+        font-size: clamp(24px, 7vw, 36px) !important;
+        line-height: 1.2 !important;
       }
     }
     @media (max-width: 480px) {
       .board-grid {
         grid-template-columns: 1fr !important;
+      }
+      .card-text {
+        font-size: 1.05rem !important;
+        line-height: 1.6 !important;
       }
     }
   `
@@ -101,11 +108,11 @@ export default function Vision({ t, boardT, autoAnimate = false, lang = 'en' }) 
           {/* ── DYNAPEX title ── */}
           <h1 style={{
             fontWeight: 800,
-            letterSpacing: '0.2em',
-            fontSize: 'clamp(1.8rem, 4vw, 3.2rem)',
+            letterSpacing: '0.12em',
+            fontSize: 'clamp(1.6rem, 5vw, 3.5rem)',
             color: '#fff',
-            margin: '0 0 20px',
-            lineHeight: 1.2,
+            margin: '0 0 16px',
+            lineHeight: 1.1,
           }}>
             DYNAPEX
           </h1>
@@ -116,7 +123,7 @@ export default function Vision({ t, boardT, autoAnimate = false, lang = 'en' }) 
               fontFamily: "var(--font-primary)",
               fontSize: 'clamp(28px, 4.5vw, 52px)',
               fontWeight: 200,
-              lineHeight: 1,
+              lineHeight: 1.1,
               letterSpacing: '0.08em',
             }
             return (
@@ -126,31 +133,51 @@ export default function Vision({ t, boardT, autoAnimate = false, lang = 'en' }) 
                   display: 'flex',
                   alignItems: 'baseline',
                   justifyContent: 'center',
+                  flexWrap: 'wrap',
                   marginBottom: 48,
+                  gap: '0 8px',
                   minHeight: 'clamp(48px, 6vw, 72px)',
                 }}
               >
-                <span className="dynamic-title-part" style={{ ...baseFont, color: '#fff', whiteSpace: 'nowrap' }}>
-                  DYN
-                </span>
-                <span
-                  className="dynamic-title-part"
-                  style={{
-                    ...baseFont,
-                    color: 'var(--color-accent)',
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    display: 'inline-block',
-                    maxWidth: animate ? '900px' : '0px',
-                    opacity: animate ? 1 : 0,
-                    transition: 'max-width 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.3s, opacity 0.8s ease 0.5s',
-                  }}
-                >
-                  AMIC JOURNEY TO THE{'\u00A0'}
-                </span>
-                <span className="dynamic-title-part" style={{ ...baseFont, color: '#fff', whiteSpace: 'nowrap' }}>
-                  APEX
-                </span>
+                <div style={{ display: 'flex', alignItems: 'baseline', whiteSpace: 'nowrap' }}>
+                  <span className="dynamic-title-part" style={{ ...baseFont, color: '#fff' }}>
+                    DYN
+                  </span>
+                  <span
+                    className="dynamic-title-part"
+                    style={{
+                      ...baseFont,
+                      color: 'var(--color-accent)',
+                      overflow: 'hidden',
+                      display: 'inline-block',
+                      maxWidth: animate ? '120px' : '0px',
+                      opacity: animate ? 1 : 0,
+                      transition: 'max-width 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s, opacity 0.5s ease 0.5s',
+                    }}
+                  >
+                    AMIC
+                  </span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'baseline', flexWrap: 'wrap', justifyContent: 'center', gap: '0 8px' }}>
+                  <span
+                    className="dynamic-title-part"
+                    style={{
+                      ...baseFont,
+                      color: 'var(--color-accent)',
+                      overflow: 'hidden',
+                      display: 'inline-block',
+                      maxWidth: animate ? '800px' : '0px',
+                      opacity: animate ? 1 : 0,
+                      transition: 'max-width 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.6s, opacity 0.8s ease 0.8s',
+                      whiteSpace: 'nowrap'
+                    }}
+                  >
+                    JOURNEY TO THE{'\u00A0'}
+                  </span>
+                  <span className="dynamic-title-part" style={{ ...baseFont, color: '#fff', whiteSpace: 'nowrap' }}>
+                    APEX
+                  </span>
+                </div>
               </div>
             )
           })()}
@@ -169,13 +196,13 @@ export default function Vision({ t, boardT, autoAnimate = false, lang = 'en' }) 
               transition: 'opacity 0.8s ease 0.8s, transform 0.8s ease 0.8s',
             }}
           >
-            <div className="card">
-              <p className="kicker">{t.vision}</p>
-              <p className="card-text">{t.visionText}</p>
+            <div className="card" style={{ textAlign: 'center', padding: 'clamp(24px, 5vw, 40px)' }}>
+              <p className="kicker" style={{ marginBottom: 20 }}>{t.vision}</p>
+              <p className="card-text" style={{ textAlign: 'center', lineHeight: 1.6 }}>{t.visionText}</p>
             </div>
-            <div className="card">
-              <p className="kicker">{t.mission}</p>
-              <p className="card-text">{t.missionText}</p>
+            <div className="card" style={{ textAlign: 'center', padding: 'clamp(24px, 5vw, 40px)' }}>
+              <p className="kicker" style={{ marginBottom: 20 }}>{t.mission}</p>
+              <p className="card-text" style={{ textAlign: 'center', lineHeight: 1.6 }}>{t.missionText}</p>
             </div>
           </div>
         </div>

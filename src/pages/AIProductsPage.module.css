@@ -171,11 +171,7 @@
   line-height: 1.75;
   color: rgba(255, 255, 255, 0.78);
   margin: 0 0 16px;
-  text-align: left; /* 모바일 가독성을 위해 left로 수정 */
-  word-break: keep-all;
-  overflow-wrap: break-word;
-  text-wrap: pretty;
-  white-space: pre-line;
+  text-align: left;
 }
 .requiredRow {
   display: flex;
@@ -335,11 +331,7 @@
   color: rgba(255, 255, 255, 0.72);
   margin: 0 0 24px;
   max-width: 1100px;
-  text-align: left; /* 모바일 가독성을 위해 left로 수정 */
-  word-break: keep-all;
-  overflow-wrap: break-word;
-  text-wrap: pretty;
-  white-space: pre-line;
+  text-align: left;
 }
 
 /* ── Workflow Bar ── */
@@ -956,28 +948,4 @@
   }
 }
 
-/* ── Regulatory Notice Banner ── */
-.regulatoryBanner {
-  margin-top: 20px;
-  max-width: 800px;
-  padding: 16px 20px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, rgba(0,200,160,0.05), rgba(0,120,200,0.05));
-  border: 1px solid rgba(0,200,160,0.10);
-  text-align: center;
-}
-.regulatoryLabel {
-  display: block;
-  font-size: 0.7rem;
-  font-weight: 700;
-  color: #ff4444;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  margin-bottom: 4px;
-}
-.regulatoryText {
-  margin: 0;
-  font-size: 0.78rem;
-  color: rgba(255,255,255,0.5);
-  line-height: 1.65;
-}
+/* ── Regulatory Notice Banner — Moved to separate component ── */

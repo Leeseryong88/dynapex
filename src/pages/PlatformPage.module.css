@@ -126,10 +126,7 @@
   font-size: 0.95rem;
   line-height: 1.6;
   margin: 0 0 24px;
-  text-align: left; /* justify에서 left로 변경 */
-  word-break: keep-all;
-  overflow-wrap: break-word;
-  text-wrap: pretty;
+  text-align: left;
 }
 
 .pipeline {
@@ -304,10 +301,7 @@
   font-size: 1rem;
   line-height: 1.6;
   color: rgba(255, 255, 255, 0.78);
-  text-align: left; /* justify에서 left로 변경 */
-  word-break: keep-all;
-  overflow-wrap: break-word;
-  text-wrap: pretty;
+  text-align: left;
 }
 
 .check {

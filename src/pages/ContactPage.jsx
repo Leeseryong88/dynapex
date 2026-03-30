@@ -40,7 +40,7 @@ export default function ContactPage() {
             : 'Request a product demo, discuss partnerships, or send us a general inquiry.'}
         </p>
       </section>
-      <Contact t={t.contact} />
+      <Contact t={t.contact} hideTitle={true} />
 
       {/* Company Info + Map */}
       <section style={{ padding: '0 24px 48px', position: 'relative', overflow: 'hidden' }}>

@@ -3,6 +3,7 @@ import { usePageMeta } from '../hooks/usePageMeta'
 import { translations } from '../i18n/translations'
 import Vision from '../components/home/Vision'
 import Distributors from '../components/home/Distributors'
+import RegulatoryBanner from '../components/RegulatoryBanner'
 import styles from './AboutPage.module.css'
 
 export default function AboutPage() {
@@ -18,6 +19,7 @@ export default function AboutPage() {
 
   return (
     <div className={styles.page}>
+      <RegulatoryBanner />
       {/* Vision + Board Members — combined section */}
       <Vision t={t.vision} boardT={t.board} autoAnimate lang={lang} />
 

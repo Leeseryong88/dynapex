@@ -76,10 +76,50 @@ a {
   color: var(--color-text);
   margin: 0;
   text-align: left; /* justify에서 left로 변경하여 모바일 가독성 향상 */
-  word-break: keep-all;
-  overflow-wrap: break-word;
-  text-wrap: pretty;
 }
+
+/* ── Forms ── */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  margin-left: 4px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 14px 18px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: var(--fs-base);
+  transition: all var(--transition-base);
+}
+
+.form-input:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.07);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 4px rgba(0, 255, 204, 0.1);
+}
+
+.form-input::placeholder {
+  color: var(--color-text-faint);
+}
+
+/* ── Typography Helpers ── */
+.text-keep-all { word-break: keep-all; }
+.text-break-all { word-break: break-all; }
+.text-wrap-pretty { text-wrap: pretty; }
+.text-wrap-balance { text-wrap: balance; }
 
 /* ── Milestones ── */
 .milestone-num {
@@ -107,34 +147,63 @@ a {
   font-size: 0.95rem;
   color: var(--color-text-muted);
   line-height: 1.6;
-  text-align: left; /* justify에서 left로 변경 */
-  word-break: keep-all;
-  overflow-wrap: break-word;
-  text-wrap: pretty;
-  white-space: pre-line;
+  text-align: left;
+  word-break: keep-all; /* Preserve Korean word units */
+  overflow-wrap: break-word; /* Allow long English words to break */
+  display: flex;
+  gap: 10px;
+  padding: 8px 0;
 }
 
-/* ── Forms ── */
-.form-input {
-  width: 100%;
-  padding: 14px 18px;
-  background: var(--color-bg-hover);
-  border: 1px solid var(--color-border);
-  border-radius: 10px;
-  color: var(--color-text);
+.card-old ul li span:first-child,
+.card-new ul li span:first-child {
+  flex-shrink: 0;
+  width: 18px;
+  font-weight: 900;
+}
+
+.card-old ul li span:first-child { color: rgba(255, 100, 100, 0.8); }
+.card-new ul li span:first-child { color: var(--color-accent); }
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 28px;
+  border-radius: var(--radius-md);
   font-size: var(--fs-base);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  text-decoration: none;
+  border: none;
   font-family: var(--font-primary);
-  transition: border-color var(--transition-base);
 }
 
-.form-input:focus {
-  outline: none;
-  border-color: rgb(0, 255, 204);
-  box-shadow: 0 0 0 3px rgba(0, 255, 204, 0.1);
+.btn-primary {
+  background: var(--color-accent);
+  color: #060a0e;
+  box-shadow: 0 4px 14px rgba(0, 255, 204, 0.25);
 }
 
-.form-input::placeholder {
-  color: var(--color-text-faint);
+.btn-primary:hover {
+  background: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--color-accent);
+  border: 1.5px solid var(--color-accent-border);
+}
+
+.btn-outline:hover {
+  background: var(--color-accent-bg);
+  border-color: var(--color-accent);
+  transform: translateY(-2px);
 }
 
 .btn-submit {
@@ -231,11 +300,6 @@ a {
 
   .milestone-label {
     font-size: clamp(12px, 1.5vw, 14px);
-  }
-
-  .form-input {
-    padding: 12px 14px;
-    font-size: clamp(14px, 1.6vw, 16px);
   }
 
   .btn-submit {

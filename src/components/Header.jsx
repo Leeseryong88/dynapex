@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import { translations } from '../i18n/translations'
@@ -12,6 +12,15 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [productsOpen, setProductsOpen] = useState(false)
   const [mobileProductsOpen, setMobileProductsOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   const isActive = (path) => location.pathname === path || (path !== '/' && location.pathname.startsWith(path))
 
@@ -19,7 +28,7 @@ export default function Header() {
 
   return (
     <>
-      <header className={styles.header} role="banner">
+      <header className={`${styles.header} ${scrolled ? styles.scrolled : ''}`} role="banner">
         <div className={styles.inner}>
           <h1>
             <Link to="/" aria-label="DYNAPEX Home">

@@ -56,6 +56,19 @@ export default function Contact({ t, hideTitle = false }) {
 
   return (
     <section style={{ padding: 'clamp(40px, 6vw, 60px) 24px 40px' }}>
+      <style>{`
+        .contact-form-row {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 20px;
+        }
+        @media (max-width: 600px) {
+          .contact-form-row {
+            grid-template-columns: 1fr;
+            gap: 24px;
+          }
+        }
+      `}</style>
       <div style={{ maxWidth: 'var(--max-width-narrow)', margin: '0 auto' }}>
         {!hideTitle && (
           <h2 style={{ textAlign: 'center', marginBottom: 32, fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}>
@@ -66,37 +79,58 @@ export default function Contact({ t, hideTitle = false }) {
           ref={formRef}
           onSubmit={handleSubmit}
           style={{
-            maxWidth: 640,
+            maxWidth: 800,
             margin: '0 auto',
             display: 'flex',
             flexDirection: 'column',
-            gap: 16,
+            gap: 24,
+            background: 'rgba(255,255,255,0.02)',
+            padding: 'clamp(24px, 5vw, 48px)',
+            borderRadius: 20,
+            border: '1px solid rgba(255,255,255,0.05)',
           }}
         >
           {/* 2-column row: Name + Institution */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-            <input type="text" name="userName" required placeholder={t.name} className="form-input" aria-label={t.name} />
-            <input type="text" name="institution" required placeholder={t.institution} className="form-input" aria-label={t.institution} />
+          <div className="contact-form-row">
+            <div className="form-group">
+              <label className="form-label">{t.name} *</label>
+              <input type="text" name="userName" required placeholder={t.name} className="form-input" />
+            </div>
+            <div className="form-group">
+              <label className="form-label">{t.institution} *</label>
+              <input type="text" name="institution" required placeholder={t.institution} className="form-input" />
+            </div>
           </div>
+
           {/* 2-column row: Email + Title */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-            <input type="email" name="email" required placeholder={t.email} className="form-input" aria-label={t.email} />
-            <input type="text" name="title" required placeholder={t.titleField} className="form-input" aria-label={t.titleField} />
+          <div className="contact-form-row">
+            <div className="form-group">
+              <label className="form-label">{t.email} *</label>
+              <input type="email" name="email" required placeholder={t.email} className="form-input" />
+            </div>
+            <div className="form-group">
+              <label className="form-label">{t.titleField} *</label>
+              <input type="text" name="title" required placeholder={t.titleField} className="form-input" />
+            </div>
           </div>
-          <textarea name="content" required placeholder={t.message} rows={5} className="form-input" style={{ resize: 'vertical' }} aria-label={t.message} />
+
+          <div className="form-group">
+            <label className="form-label">{t.message} *</label>
+            <textarea name="content" required placeholder={t.message} rows={6} className="form-input" style={{ resize: 'vertical' }} />
+          </div>
 
           {status === 'success' && (
-            <p role="alert" style={{ color: 'var(--color-accent)', margin: 0 }}>
+            <p role="alert" style={{ color: 'var(--color-accent)', margin: 0, textAlign: 'center', fontWeight: 600 }}>
               {t.successMsg || 'Message sent successfully! We will get back to you shortly.'}
             </p>
           )}
           {status === 'error' && (
-            <p role="alert" style={{ color: 'var(--color-error)', margin: 0 }}>
+            <p role="alert" style={{ color: 'var(--color-error)', margin: 0, textAlign: 'center', fontWeight: 600 }}>
               {t.errorMsg || 'Failed to send. Please email us directly at contact@dynapex.co'}
             </p>
           )}
 
-          <button type="submit" className="btn-submit" disabled={status === 'sending'}>
+          <button type="submit" className="btn-submit" disabled={status === 'sending'} style={{ marginTop: 8, height: 56, fontSize: '1.05rem' }}>
             {status === 'sending' ? (t.sending || 'Sending...') : t.submit}
           </button>
         </form>

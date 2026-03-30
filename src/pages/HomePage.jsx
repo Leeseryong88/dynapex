@@ -5,6 +5,7 @@ import Hero from '../components/home/Hero'
 import Milestones from '../components/home/Milestones'
 import UnmetNeed from '../components/home/UnmetNeed'
 import LatestNews from '../components/home/LatestNews'
+import Solutions from '../components/home/Solutions'
 
 export default function HomePage() {
   const { lang } = useLanguage()
@@ -20,6 +21,7 @@ export default function HomePage() {
   return (
     <>
       <Hero t={t.hero} />
+      <Solutions t={t.solutions} />
       <UnmetNeed t={t.unmet} />
       <Milestones t={t.milestones} trustedBy={t.trustedBy} />
       <LatestNews />
