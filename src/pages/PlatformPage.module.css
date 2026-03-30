@@ -1,0 +1,529 @@
+.page {
+  padding-bottom: 64px;
+  background: #060a0e;
+}
+
+.hero {
+  min-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 80px 24px 60px;
+  background: linear-gradient(135deg, rgba(12, 17, 23, 0.96), rgba(8, 12, 18, 0.96));
+}
+
+.hero h1 {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  margin: 0 0 16px;
+}
+
+.hero p {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+}
+
+/* ── Video Hero ── */
+.videoHero {
+  position: relative;
+  width: 100%;
+  min-height: 70vh;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  overflow: hidden;
+}
+
+.heroVideo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.videoOverlay {
+  position: relative;
+  z-index: 2;
+  text-align: right;
+  padding: 40px 48px;
+  background: linear-gradient(to left, rgba(0, 0, 0, 0.55) 0%, transparent 100%);
+  width: 60%;
+  min-width: 400px;
+}
+@media (max-width: 768px) {
+  .videoOverlay {
+    width: 100%;
+    min-width: unset;
+    padding: 32px 24px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, transparent 100%);
+    text-align: center;
+  }
+}
+
+.videoOverlay h1 {
+  font-family: var(--font-primary);
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin: 0 0 8px;
+  color: #fff;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.6);
+}
+
+.videoOverlay p {
+  font-size: clamp(0.95rem, 1.8vw, 1.2rem);
+  color: var(--color-accent);
+  margin: 0;
+  letter-spacing: 0.06em;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+}
+
+.section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 60px 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.architectureSection {
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+.architectureSection::before {
+  content: '';
+  position: absolute;
+  bottom: -65%;
+  left: -46%;
+  width: 1400px;
+  height: 1400px;
+  background: url('/images/brand-glow.png') center / contain no-repeat;
+  opacity: 0.65;
+  pointer-events: none;
+  z-index: 0;
+}
+.architectureInner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 60px 24px;
+  position: relative;
+  z-index: 1;
+}
+
+.sectionTitle {
+  color: #fff;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  margin: 0 0 8px;
+}
+
+.sectionDesc {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0 0 24px;
+  text-align: left; /* justify에서 left로 변경 */
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  text-wrap: pretty;
+}
+
+.pipeline {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 6px;
+  align-items: center;
+  margin-bottom: 32px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 4px 0;
+}
+
+.pipeline::-webkit-scrollbar { display: none; }
+
+.stage {
+  background: rgba(0, 255, 204, 0.1);
+  border: 1px solid rgba(0, 255, 204, 0.25);
+  border-radius: 8px;
+  padding: 6px 12px;
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.arrow {
+  color: rgba(0, 255, 204, 0.5);
+  font-size: 1.2rem;
+}
+
+.architectureImage {
+  margin-bottom: 32px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: zoom-in;
+  transition: transform 0.3s ease;
+}
+
+.architectureImage:hover {
+  transform: scale(1.02);
+}
+
+.architectureImage img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.architectureImage:hover img {
+  transform: scale(1.01);
+}
+
+.platformStats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+}
+
+.statBox {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+}
+
+.statValue {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--color-accent);
+  display: block;
+}
+
+.statLabel {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.statsSection {
+  padding: 60px 24px;
+  background: linear-gradient(rgba(11, 18, 26, 0.72), rgba(11, 18, 26, 0.72)), url('/images/bg/background empty.png') center/cover;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 28px;
+  max-width: 1000px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.statItem {
+  padding: 20px;
+}
+
+.statNumber {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 600;
+  color: #fff;
+}
+
+.statDivider {
+  height: 1px;
+  width: 80px;
+  margin: 16px auto 12px;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.statItem .statLabel {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.statNote {
+  margin-top: 6px;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.advantageSection {
+  padding: 60px 24px;
+  background: linear-gradient(rgba(11, 18, 26, 0.65), rgba(11, 18, 26, 0.65)), url('/images/bg/background.jpg') center/cover;
+}
+
+.advantageLayout {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+}
+
+@media (min-width: 1024px) {
+  .advantageLayout {
+    grid-template-columns: 1.2fr 0.8fr;
+  }
+}
+
+.keypoints {
+  background: rgba(8, 12, 18, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: clamp(24px, 3vw, 40px);
+}
+
+.keypoints h4 {
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 24px;
+  letter-spacing: 0.05em;
+}
+
+.keypoints ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 16px;
+}
+
+.keypoints li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.78);
+  text-align: left; /* justify에서 left로 변경 */
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  text-wrap: pretty;
+}
+
+.check {
+  color: var(--color-accent);
+  flex-shrink: 0;
+}
+
+.reportArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.reportStack {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 12px;
+  overflow: hidden;
+  max-width: 400px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+}
+
+.reportStack img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.reportTabs {
+  display: flex;
+  gap: 12px;
+}
+
+.reportTabs button {
+  padding: 10px 24px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.reportTabs button:hover,
+.reportTabs button.active {
+  background: rgba(0, 255, 204, 0.15);
+  border-color: rgba(0, 255, 204, 0.4);
+  color: var(--color-accent);
+}
+
+/* AI Portfolio — 브로셔 P2, 카드그리드 가이드: image flex:2, text flex:1, object-fit: contain */
+.portfolioWrap {
+  position: relative;
+  overflow: hidden;
+}
+.portfolioWrap::before {
+  content: '';
+  position: absolute;
+  bottom: -65%;
+  right: -46%;
+  width: 1400px;
+  height: 1400px;
+  background: url('/images/brand-glow.png') center / contain no-repeat;
+  opacity: 0.65;
+  pointer-events: none;
+  z-index: 0;
+}
+.portfolioSection {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 60px 24px;
+  position: relative;
+  z-index: 1;
+}
+
+.portfolioTitle {
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.05em;
+  margin: 0 0 8px;
+  text-align: center;
+}
+
+.portfolioSubtitle {
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+  margin: 0 0 40px;
+  font-size: 0.95rem;
+}
+
+.portfolioGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: center;
+}
+
+.portfolioCard {
+  width: calc(50% - 12px);
+  min-width: 220px;
+}
+
+@media (min-width: 900px) {
+  .portfolioCard {
+    width: calc(25% - 18px);
+    min-width: 200px;
+  }
+}
+
+@media (max-width: 640px) {
+  .portfolioCard {
+    width: calc(100% - 0px);
+    min-width: unset;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 900px) {
+  .portfolioCard {
+    width: calc(50% - 12px);
+    min-width: 150px;
+  }
+}
+
+.portfolioCard {
+  display: flex;
+  flex-direction: column;
+  background: rgba(8, 14, 20, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.portfolioCard:hover {
+  border-color: rgba(0, 255, 204, 0.4);
+  transform: translateY(-4px);
+}
+
+.portfolioCardImage {
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 12px;
+  overflow: hidden;
+}
+
+.portfolioCardImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: brightness(0.95);
+}
+
+.portfolioCardText {
+  flex: 1;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.portfolioCardText h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+.portfolioBrand {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .architectureImage {
+    margin-bottom: 20px;
+    border-radius: 12px;
+  }
+  .platformStats {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px;
+  }
+  .statBox {
+    padding: 16px 12px;
+  }
+  .statValue {
+    font-size: 1.4rem;
+  }
+  .reportStack {
+    max-width: 100%;
+  }
+  .reportTabs {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .reportTabs button {
+    padding: 8px 16px;
+    font-size: 0.8rem;
+  }
+}
+@media (max-width: 768px) {
+  .videoHero {
+    min-height: 50vh;
+  }
+  .videoOverlay {
+    width: 100%;
+    min-width: unset;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, transparent 100%);
+    text-align: center;
+  }
+}

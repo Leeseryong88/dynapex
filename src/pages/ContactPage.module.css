@@ -1,0 +1,45 @@
+.page {
+  padding-bottom: 64px;
+  background: #060a0e;
+  position: relative;
+  overflow: hidden;
+}
+.page::before {
+  content: '';
+  position: absolute;
+  top: -85%;
+  right: -60%;
+  width: 1400px;
+  height: 1400px;
+  background: url('/images/brand-glow.png') center / contain no-repeat;
+  opacity: 0.65;
+  pointer-events: none;
+  z-index: 0;
+}
+.page > * {
+  position: relative;
+  z-index: 1;
+}
+
+.hero {
+  min-height: 28vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 80px 24px 40px;
+  background: linear-gradient(135deg, rgba(12, 17, 23, 0.96), rgba(8, 12, 18, 0.96));
+}
+
+.hero h1 {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  margin: 0 0 12px;
+  color: #fff;
+}
+
+.hero p {
+  font-size: 1.05rem;
+  color: var(--color-text-muted);
+  margin: 0;
+}

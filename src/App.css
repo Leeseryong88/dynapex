@@ -1,0 +1,270 @@
+/* ═══════════════════════════════════════════════════════
+   Global Utility Styles — Uses :root design tokens
+   ═══════════════════════════════════════════════════════ */
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  color: inherit;
+}
+
+/* ── Sections ── */
+.section {
+  display: flex;
+  align-items: center;
+  padding: clamp(60px, 8vw, 80px) 24px;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(6, 10, 14, 0.95), rgba(8, 14, 20, 0.98));
+}
+
+.section-inner {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: clamp(24px, 4vw, 48px);
+}
+
+.section-title .kicker {
+  display: block;
+  font-size: clamp(14px, 1.8vw, 18px);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: var(--space-md);
+}
+
+.section-title:not(.section-title .kicker) {
+  font-size: var(--fs-hero);
+  font-weight: 700;
+  margin: 0;
+}
+
+.kicker {
+  display: inline-block;
+  font-size: clamp(14px, 1.8vw, 18px);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  background: rgba(0, 255, 204, 0.1);
+  padding: 6px 14px;
+  border-radius: 20px;
+  position: relative;
+}
+
+/* ── Cards ── */
+.card {
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: clamp(24px, 4vw, 40px);
+  box-shadow: var(--shadow-card);
+}
+
+.card-text {
+  font-size: clamp(16px, 2vw, 22px);
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--color-text);
+  margin: 0;
+  text-align: left; /* justify에서 left로 변경하여 모바일 가독성 향상 */
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  text-wrap: pretty;
+}
+
+/* ── Milestones ── */
+.milestone-num {
+  font-size: clamp(1.5rem, 3vw, 2.4rem);
+  font-weight: 800;
+  color: var(--color-accent);
+  white-space: nowrap;
+  line-height: 1;
+  margin-bottom: var(--space-sm);
+}
+
+.milestone-label {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  line-height: 1.5;
+  min-height: 2.8em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Old vs New Cards ── */
+.card-old ul li,
+.card-new ul li {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  text-align: left; /* justify에서 left로 변경 */
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  text-wrap: pretty;
+  white-space: pre-line;
+}
+
+/* ── Forms ── */
+.form-input {
+  width: 100%;
+  padding: 14px 18px;
+  background: var(--color-bg-hover);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  color: var(--color-text);
+  font-size: var(--fs-base);
+  font-family: var(--font-primary);
+  transition: border-color var(--transition-base);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: rgb(0, 255, 204);
+  box-shadow: 0 0 0 3px rgba(0, 255, 204, 0.1);
+}
+
+.form-input::placeholder {
+  color: var(--color-text-faint);
+}
+
+.btn-submit {
+  padding: 16px 32px;
+  background: var(--color-accent);
+  border: none;
+  border-radius: 10px;
+  color: #0a1628;
+  font-size: var(--fs-base);
+  font-weight: 700;
+  font-family: var(--font-primary);
+  cursor: pointer;
+  transition: background var(--transition-base), transform var(--transition-base);
+}
+
+.btn-submit:hover {
+  background: rgb(0, 230, 184);
+  transform: translateY(-1px);
+}
+
+.btn-submit:active {
+  transform: translateY(0);
+}
+
+/* ── Unmet Grid ── */
+.unmet-grid {
+  display: grid !important;
+}
+
+/* ── Milestones Grid Responsive ── */
+@media (max-width: 768px) {
+  .milestone-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}
+@media (max-width: 480px) {
+  .milestone-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .unmet-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .unmet-grid > div:first-of-type {
+    order: 1;
+  }
+
+  .unmet-grid > div:nth-of-type(2) {
+    order: 2;
+    padding: 8px 0;
+  }
+
+  .unmet-grid > div:last-of-type {
+    order: 3;
+  }
+
+  .section {
+    padding: clamp(40px, 6vw, 60px) 16px;
+  }
+
+  .card {
+    padding: clamp(16px, 3vw, 32px);
+  }
+}
+
+@media (max-width: 480px) {
+  .section {
+    padding: 32px 16px;
+  }
+
+  .section-title {
+    margin-bottom: clamp(16px, 3vw, 32px);
+  }
+
+  .section-title .kicker {
+    font-size: clamp(12px, 1.5vw, 14px);
+  }
+
+  .card {
+    padding: clamp(14px, 2vw, 24px);
+  }
+
+  .card-text {
+    font-size: clamp(14px, 1.8vw, 18px);
+  }
+
+  .milestone-num {
+    font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+  }
+
+  .milestone-label {
+    font-size: clamp(12px, 1.5vw, 14px);
+  }
+
+  .form-input {
+    padding: 12px 14px;
+    font-size: clamp(14px, 1.6vw, 16px);
+  }
+
+  .btn-submit {
+    padding: 14px 24px;
+    font-size: clamp(14px, 1.6vw, 16px);
+  }
+}
+
+/* ── Skip to Content (a11y) ── */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(6, 10, 14, 0.95);
+  color: rgb(0, 255, 204);
+  border: 1px solid rgba(0, 255, 204, 0.3);
+  padding: 12px 24px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+  z-index: 9999;
+  transition: top var(--transition-fast);
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: none;
+  box-shadow: 0 4px 12px rgba(0, 255, 204, 0.15);
+}

@@ -1,0 +1,388 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: rgba(6, 10, 14, 0.9);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+@media (max-width: 480px) {
+  .inner {
+    padding: 10px 16px;
+  }
+}
+
+.header h1 {
+  margin: 0;
+}
+
+.header h1 a {
+  display: block;
+}
+
+.header h1 img {
+  height: 36px;
+  width: auto;
+  position: relative;
+  top: 3px;
+}
+
+@media (max-width: 480px) {
+  .header h1 img {
+    height: 32px; /* 모바일에서 로고 시인성 확보를 위해 약간 확대 */
+  }
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 44px;
+}
+
+.link {
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  transition: color 0.2s;
+}
+
+.link:hover,
+.link.active {
+  color: rgb(0, 255, 204);
+}
+
+.link.active {
+  position: relative;
+}
+
+.link.active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -14px;
+  height: 2px;
+  background: rgb(0, 255, 204);
+  border-radius: 1px;
+}
+
+.productsWrap {
+  position: relative;
+  padding-bottom: 14px;
+  margin-bottom: -14px;
+}
+
+.productsBtn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.productsBtn:hover {
+  color: rgb(0, 255, 204);
+}
+
+.arrow {
+  font-size: 10px;
+}
+
+/* ── Desktop Dropdown ── */
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(8px);
+  min-width: 640px;
+  background: rgba(8, 14, 20, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 24px 28px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, visibility 0.2s, transform 0.2s;
+}
+
+.dropdown.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(4px);
+}
+
+.dropdownInner {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* DYNAPEX Platform — top row, centered */
+.platformRow {
+  text-align: center;
+  padding-bottom: 14px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.platformLink {
+  color: rgb(0, 255, 204);
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  transition: opacity 0.2s;
+}
+
+.platformLink:hover {
+  opacity: 0.8;
+}
+
+/* Product items — 4-column wide grid */
+.productsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px 20px;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.groupTitle {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.dropdownItem {
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  font-size: 13.5px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  transition: color 0.2s, background 0.2s;
+  white-space: nowrap;
+}
+
+.dropdownItem:hover {
+  color: rgb(0, 255, 204);
+  background: rgba(0, 255, 204, 0.06);
+}
+
+.langWrap {
+  margin-left: 8px;
+}
+
+.langBtn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.langBtn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* ── Hamburger ── */
+.burger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  width: 36px;
+  height: 36px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.burger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: #fff;
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+.burger.burgerOpen span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.burger.burgerOpen span:nth-child(2) {
+  opacity: 0;
+}
+
+.burger.burgerOpen span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* ── Mobile Navigation (outside header to avoid backdrop-filter containment) ── */
+.mobileNav {
+  display: none;
+  position: fixed;
+  top: 60px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999;
+  background: rgba(6, 10, 14, 0.98);
+  padding: 32px 28px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+
+.mobileNav.mobileOpen {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Top-level mobile links (VUNO style: big, clean, spaced) */
+.mobileLink {
+  display: block;
+  color: #fff;
+  text-decoration: none;
+  font-size: 22px;
+  font-weight: 600;
+  padding: 18px 0;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+
+/* Accordion button for Products */
+.mobileAccordion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* Circle arrow (VUNO style) */
+.mobileArrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  flex-shrink: 0;
+  position: relative;
+  transition: transform 0.3s ease, border-color 0.3s;
+}
+
+.mobileArrow::before {
+  content: '';
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid rgba(255, 255, 255, 0.7);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.7);
+  transform: rotate(-45deg);
+  margin-left: -2px;
+}
+
+.mobileArrow.mobileArrowOpen {
+  transform: rotate(90deg);
+  border-color: rgb(0, 255, 204);
+}
+
+.mobileArrow.mobileArrowOpen::before {
+  border-color: rgb(0, 255, 204);
+}
+
+/* Accordion panel — collapsible */
+.mobilePanel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease;
+  padding-left: 16px;
+}
+
+.mobilePanel.mobilePanelOpen {
+  max-height: 500px;
+}
+
+/* Sub-items inside accordion */
+.mobileSub {
+  display: block;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  font-size: 17px;
+  padding: 12px 0;
+}
+
+.mobileSub:hover {
+  color: #fff;
+}
+
+/* Platform link highlighted */
+.mobilePlatform {
+  font-weight: 700;
+  color: rgb(0, 255, 204);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .nav {
+    display: none;
+  }
+
+  .burger {
+    display: flex;
+  }
+
+  .mobileNav {
+    display: block;
+  }
+
+  .productsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .dropdown {
+    min-width: 280px;
+    left: auto;
+    right: 0;
+    transform: translateY(8px);
+  }
+
+  .dropdown.open {
+    transform: translateY(4px);
+  }
+}
