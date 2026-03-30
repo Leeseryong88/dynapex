@@ -83,7 +83,7 @@ export default function Contact({ t, hideTitle = false }) {
             margin: '0 auto',
             display: 'flex',
             flexDirection: 'column',
-            gap: 24,
+            gap: 20,
             background: 'rgba(255,255,255,0.02)',
             padding: 'clamp(24px, 5vw, 48px)',
             borderRadius: 20,
@@ -93,11 +93,9 @@ export default function Contact({ t, hideTitle = false }) {
           {/* 2-column row: Name + Institution */}
           <div className="contact-form-row">
             <div className="form-group">
-              <label className="form-label">{t.name} *</label>
               <input type="text" name="userName" required placeholder={t.name} className="form-input" />
             </div>
             <div className="form-group">
-              <label className="form-label">{t.institution} *</label>
               <input type="text" name="institution" required placeholder={t.institution} className="form-input" />
             </div>
           </div>
@@ -105,17 +103,14 @@ export default function Contact({ t, hideTitle = false }) {
           {/* 2-column row: Email + Title */}
           <div className="contact-form-row">
             <div className="form-group">
-              <label className="form-label">{t.email} *</label>
               <input type="email" name="email" required placeholder={t.email} className="form-input" />
             </div>
             <div className="form-group">
-              <label className="form-label">{t.titleField} *</label>
               <input type="text" name="title" required placeholder={t.titleField} className="form-input" />
             </div>
           </div>
 
           <div className="form-group">
-            <label className="form-label">{t.message} *</label>
             <textarea name="content" required placeholder={t.message} rows={6} className="form-input" style={{ resize: 'vertical' }} />
           </div>
 

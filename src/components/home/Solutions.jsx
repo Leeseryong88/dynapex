@@ -49,7 +49,11 @@ export default function Solutions({ t }) {
               margin-bottom: 32px !important;
             }
             .solutions-grid {
+              grid-template-columns: repeat(3, 1fr) !important; /* 4열에서 3열로 변경 */
               gap: 8px !important;
+            }
+            .solutions-item:nth-child(n+7) {
+              display: none !important; /* 6개까지만 표시 */
             }
             .solutions-item {
               width: 100% !important; /* 그리드 셀에 맞게 꽉 채움 */
