@@ -28,12 +28,29 @@ export default function Milestones({ t, trustedBy }) {
         padding: 0 4px !important;
       }
       .hospital-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 12px !important;
+        display: flex !important;
+        overflow-x: auto !important;
+        scroll-snap-type: x mandatory !important;
+        gap: 16px !important;
+        padding: 10px 24px 30px !important;
+        margin: 0 -24px !important;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+      .hospital-grid::-webkit-scrollbar {
+        display: none;
+      }
+      .hospital-grid > div {
+        flex: 0 0 70% !important;
+        scroll-snap-align: center !important;
       }
       .hospital-card {
-        padding: 16px 8px !important;
-        min-height: 80px !important;
+        padding: 32px 16px !important;
+        min-height: 140px !important;
+        background: rgba(255,255,255,0.06) !important;
+      }
+      .hospital-card img {
+        max-height: 80px !important;
       }
       .section-title {
         font-size: 1.5rem !important;

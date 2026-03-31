@@ -34,8 +34,36 @@ const distributors = [
 ]
 
 export default function Distributors({ t }) {
+  const mobileStyles = `
+    @media (max-width: 768px) {
+      .distributors-grid {
+        display: flex !important;
+        overflow-x: auto !important;
+        scroll-snap-type: x mandatory !important;
+        gap: 20px !important;
+        padding: 20px 24px 40px !important;
+        margin: 0 -24px !important;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+      .distributors-grid::-webkit-scrollbar {
+        display: none;
+      }
+      .distributors-grid > div {
+        flex: 0 0 85% !important;
+        scroll-snap-align: center !important;
+      }
+      .distributor-card {
+        min-height: auto !important;
+        padding: 24px !important;
+        border-radius: 20px !important;
+      }
+    }
+  `
+
   return (
     <section className="section">
+      <style>{mobileStyles}</style>
       {/* Brand glow — bottom-left, large */}
       <img
         src="/images/brand-glow.png"
@@ -56,6 +84,7 @@ export default function Distributors({ t }) {
           {t.title}
         </h2>
         <div
+          className="distributors-grid"
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
