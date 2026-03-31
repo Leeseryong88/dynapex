@@ -150,15 +150,16 @@ export default function Vision({ t, boardT, autoAnimate = false, lang = 'en' }) 
                       color: 'var(--color-accent)',
                       overflow: 'hidden',
                       display: 'inline-block',
-                      maxWidth: animate ? '120px' : '0px',
+                      maxWidth: animate ? '200px' : '0px',
                       opacity: animate ? 1 : 0,
                       transition: 'max-width 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s, opacity 0.5s ease 0.5s',
+                      whiteSpace: 'nowrap',
                     }}
                   >
                     AMIC
                   </span>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'baseline', flexWrap: 'wrap', justifyContent: 'center', gap: '0 8px' }}>
+                <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: '0 8px', whiteSpace: 'nowrap' }}>
                   <span
                     className="dynamic-title-part"
                     style={{
