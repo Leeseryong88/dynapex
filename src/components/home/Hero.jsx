@@ -164,7 +164,6 @@ export default function Hero({ t }) {
           objectFit: 'cover', objectPosition: 'center', zIndex: 0,
         }}
       >
-        <source src="/videos/dynapex-intro.mp4" type="video/mp4" />
         <source src="/video/intro.mov" type="video/quicktime" />
       </video>
 
@@ -182,15 +181,9 @@ export default function Hero({ t }) {
           objectFit: 'cover', objectPosition: 'center', zIndex: 1,
         }}
         onError={(e) => {
-          // If video fails to load, try to reload or show fallback
           console.error("Hero video failed to load", e);
-          const video = e.currentTarget;
-          if (video.src.includes('.mp4')) {
-            video.src = "/video/intro.mov";
-          }
         }}
       >
-        <source src="/videos/dynapex-intro.mp4" type="video/mp4" />
         <source src="/video/intro.mov" type="video/quicktime" />
       </video>
 
