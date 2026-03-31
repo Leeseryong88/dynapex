@@ -51,6 +51,8 @@ export default function PlatformPage() {
           muted
           loop
           playsInline
+          preload="auto"
+          poster="/images/bg/background.jpg"
         />
         <div className={styles.videoOverlay}>
           <h1>{lang === 'kr' ? 'DYNAPEX 플랫폼' : 'DYNAPEX Platform'}</h1>

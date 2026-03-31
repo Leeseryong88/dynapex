@@ -152,26 +152,46 @@ export default function Hero({ t }) {
 
       {/* Background layer for mobile (blurred fill) */}
       <video
-        autoPlay muted loop playsInline
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
         className="hero-video-bg"
+        poster="/images/bg/background.jpg"
         style={{
           position: 'absolute', inset: 0, width: '100%', height: '100%',
           objectFit: 'cover', objectPosition: 'center', zIndex: 0,
         }}
       >
-        <source src="/video/intro.mov" type="video/mp4" />
+        <source src="/videos/dynapex-intro.mp4" type="video/mp4" />
+        <source src="/video/intro.mov" type="video/quicktime" />
       </video>
 
       {/* Main video layer */}
       <video
-        autoPlay muted loop playsInline
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
         className="hero-video-main"
+        poster="/images/bg/background.jpg"
         style={{
           position: 'absolute', inset: 0, width: '100%', height: '100%',
           objectFit: 'cover', objectPosition: 'center', zIndex: 1,
         }}
+        onError={(e) => {
+          // If video fails to load, try to reload or show fallback
+          console.error("Hero video failed to load", e);
+          const video = e.currentTarget;
+          if (video.src.includes('.mp4')) {
+            video.src = "/video/intro.mov";
+          }
+        }}
       >
-        <source src="/video/intro.mov" type="video/mp4" />
+        <source src="/videos/dynapex-intro.mp4" type="video/mp4" />
+        <source src="/video/intro.mov" type="video/quicktime" />
       </video>
 
       <div
