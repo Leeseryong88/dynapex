@@ -14,7 +14,11 @@ export default function Solutions({ t }) {
   const handleScroll = () => {
     if (!scrollRef.current || window.innerWidth > 768) return
     const el = scrollRef.current
-    const cardWidth = el.offsetWidth * 0.8 + 16 // 80% + gap 16px
+    const firstCard = el.children?.[0]
+    const secondCard = el.children?.[1]
+    const cardWidth = secondCard
+      ? secondCard.offsetLeft - firstCard.offsetLeft
+      : el.offsetWidth * 0.8 + 16
     const idx = Math.round(el.scrollLeft / cardWidth)
     if (idx !== activeIdx) setActiveIdx(idx)
   }
@@ -74,7 +78,7 @@ export default function Solutions({ t }) {
               scroll-snap-type: x mandatory !important;
               gap: 16px !important;
               padding: 10px 10% 30px !important; /* 좌우 10% 패딩으로 첫/끝 카드 중앙 배치 */
-              margin: 0 !important; 
+              margin: 0 -24px !important;
               justify-content: flex-start !important; /* 중앙 정렬 해제하여 스크롤 시작점 확보 */
               scrollbar-width: none; 
               -ms-overflow-style: none; 
@@ -121,15 +125,6 @@ export default function Solutions({ t }) {
               line-height: 1.4 !important;
               white-space: normal !important;
               opacity: 0.7;
-            }
-          }
-          /* 아주 작은 화면 (320px 이하) 대응 */
-          @media (max-width: 360px) {
-            .solutions-grid {
-              gap: 4px !important;
-            }
-            .solutions-card-text {
-              padding: 4px 1px !important;
             }
           }
           /* 페이지네이션 (02 / 04) */

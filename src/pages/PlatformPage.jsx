@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import { usePageMeta } from '../hooks/usePageMeta'
@@ -12,6 +12,25 @@ export default function PlatformPage() {
   const { lang } = useLanguage()
   const t = translations[lang]?.platform ?? translations.en.platform
   const d = platformData
+  const scrollRef = useRef(null)
+  const [activeIdx, setActiveIdx] = useState(0)
+
+  // 모바일 스크롤 시 인덱스 트래킹
+  const handleScroll = () => {
+    if (!scrollRef.current || window.innerWidth > 768) return
+    const el = scrollRef.current
+    const cardWidth = el.offsetWidth * 0.8 + 16 // 80% + gap 16px
+    const idx = Math.round(el.scrollLeft / cardWidth)
+    if (idx !== activeIdx) setActiveIdx(idx)
+  }
+
+  useEffect(() => {
+    const el = scrollRef.current
+    if (el) {
+      el.addEventListener('scroll', handleScroll)
+      return () => el.removeEventListener('scroll', handleScroll)
+    }
+  }, [activeIdx])
 
   usePageMeta(
     'DYNAPEX 플랫폼',
@@ -48,7 +67,7 @@ export default function PlatformPage() {
         <section className={styles.portfolioSection}>
           <h2 className={styles.portfolioTitle}>{t.portfolioTitle}</h2>
           <p className={styles.portfolioSubtitle}>{t.portfolioSubtitle}</p>
-          <div className={styles.portfolioGrid}>
+          <div className={styles.portfolioGrid} ref={scrollRef}>
             {d.productCards.map((card) => (
               <Link key={card.id} to={`/products?tab=${card.id}`} className={styles.portfolioCard}>
                 <div className={styles.portfolioCardImage}>
@@ -60,6 +79,17 @@ export default function PlatformPage() {
                 </div>
               </Link>
             ))}
+          </div>
+
+          {/* 모바일 페이지네이션 표시 */}
+          <div className={styles.portfolioPagination}>
+            <span style={{ opacity: 0.4, padding: '0 10px' }}>&lt;</span>
+            <span className={styles.paginationNum}>
+              {(activeIdx + 1).toString().padStart(2, '0')}
+            </span>
+            <span style={{ opacity: 0.4 }}>/</span>
+            <span>{d.productCards.length.toString().padStart(2, '0')}</span>
+            <span style={{ opacity: 0.4, padding: '0 10px' }}>&gt;</span>
           </div>
         </section>
       </div>
