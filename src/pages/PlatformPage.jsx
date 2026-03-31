@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import { usePageMeta } from '../hooks/usePageMeta'
@@ -15,22 +15,44 @@ export default function PlatformPage() {
   const scrollRef = useRef(null)
   const [activeIdx, setActiveIdx] = useState(0)
 
-  // 모바일 스크롤 시 인덱스 트래킹
-  const handleScroll = () => {
+  const updateActiveCardIndex = useCallback(() => {
     if (!scrollRef.current || window.innerWidth > 768) return
     const el = scrollRef.current
-    const cardWidth = el.offsetWidth * 0.8 + 16 // 80% + gap 16px
-    const idx = Math.round(el.scrollLeft / cardWidth)
-    if (idx !== activeIdx) setActiveIdx(idx)
-  }
+    const cards = Array.from(el.children)
+    if (!cards.length) return
+
+    const viewportCenter = el.scrollLeft + el.clientWidth / 2
+    let nearestIndex = 0
+    let minDistance = Number.POSITIVE_INFINITY
+
+    cards.forEach((card, index) => {
+      const cardCenter = card.offsetLeft + card.clientWidth / 2
+      const distance = Math.abs(cardCenter - viewportCenter)
+      if (distance < minDistance) {
+        minDistance = distance
+        nearestIndex = index
+      }
+    })
+
+    setActiveIdx(nearestIndex)
+  }, [])
 
   useEffect(() => {
     const el = scrollRef.current
-    if (el) {
-      el.addEventListener('scroll', handleScroll)
-      return () => el.removeEventListener('scroll', handleScroll)
+    if (!el) return undefined
+
+    const handleScroll = () => updateActiveCardIndex()
+    const handleResize = () => updateActiveCardIndex()
+
+    el.addEventListener('scroll', handleScroll, { passive: true })
+    window.addEventListener('resize', handleResize)
+    updateActiveCardIndex()
+
+    return () => {
+      el.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('resize', handleResize)
     }
-  }, [activeIdx])
+  }, [updateActiveCardIndex])
 
   usePageMeta(
     'DYNAPEX 플랫폼',

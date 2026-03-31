@@ -156,15 +156,13 @@ export default function Hero({ t }) {
         muted
         loop
         playsInline
-        preload="auto"
         className="hero-video-bg"
-        poster="/images/bg/background.jpg"
         style={{
           position: 'absolute', inset: 0, width: '100%', height: '100%',
           objectFit: 'cover', objectPosition: 'center', zIndex: 0,
         }}
       >
-        <source src="/video/intro.mov" type="video/quicktime" />
+        <source src="/video/intro.mov" type="video/mp4" />
       </video>
 
       {/* Main video layer */}
@@ -173,18 +171,13 @@ export default function Hero({ t }) {
         muted
         loop
         playsInline
-        preload="auto"
         className="hero-video-main"
-        poster="/images/bg/background.jpg"
         style={{
           position: 'absolute', inset: 0, width: '100%', height: '100%',
           objectFit: 'cover', objectPosition: 'center', zIndex: 1,
         }}
-        onError={(e) => {
-          console.error("Hero video failed to load", e);
-        }}
       >
-        <source src="/video/intro.mov" type="video/quicktime" />
+        <source src="/video/intro.mov" type="video/mp4" />
       </video>
 
       <div
