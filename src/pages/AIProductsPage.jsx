@@ -28,8 +28,24 @@ export default function AIProductsPage() {
   const [activeTab, setActiveTab] = useState(
     tabOrder.find((t) => t.id === initialTab) ? initialTab : 'gbm'
   )
+  const [expandedSections, setExpandedSections] = useState({})
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768)
   const { lang } = useLanguage()
   const kr = lang === 'kr'
+  const tGlobal = translations[lang]
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768)
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  const toggleSection = (sectionId) => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [sectionId]: !prev[sectionId]
+    }))
+  }
 
   usePageMeta(
     'AI 제품 포트폴리오 — DYNAPEX',
@@ -51,6 +67,7 @@ export default function AIProductsPage() {
   // Scroll to top whenever activeTab changes
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' })
+    setExpandedSections({}) // Reset expanded state when switching products
   }, [activeTab])
 
   const content = productContent[activeTab]
@@ -144,172 +161,192 @@ export default function AIProductsPage() {
               {/* Section Description */}
               <p className={styles.slideSectionDesc}>{kr ? section.descKr : section.descEn}</p>
 
-              {/* Section-level Required Input (e.g., Structure Habitat) */}
-              {section.required && (
-                <div className={styles.requiredRow} style={{ marginTop: 8, marginBottom: 12 }}>
-                  <span className={styles.requiredLabel}>{kr ? '필수 입력 시퀀스:' : 'Required Input:'}</span>
-                  <div className={styles.tags}>
-                    {section.required.map((r) => (
-                      <span key={r} className={styles.tag}>{r}</span>
-                    ))}
+              {/* View Details Button (Mobile only) */}
+              {isMobile && (
+                <button 
+                  type="button" 
+                  className={styles.viewDetailsBtn}
+                  onClick={() => toggleSection(section.id || si)}
+                >
+                  <span className={styles.viewDetailsText}>
+                    {expandedSections[section.id || si] ? (kr ? '간략히 보기' : 'Show Less') : tGlobal.platform.viewDetails}
+                  </span>
+                  <div className={`${styles.viewDetailsIcon} ${expandedSections[section.id || si] ? styles.iconRotated : ''}`}>
+                    <span />
+                    <span />
                   </div>
-                </div>
+                </button>
               )}
 
-              {/* Workflow Steps */}
-              {section.workflow && (
-                <div className={styles.workflowBar}>
-                  {section.workflow.map((w, wi) => (
-                    <div key={wi} className={styles.workflowStep}>
-                      <span className={styles.workflowStepNum}>STEP {w.step}</span>
-                      <span className={styles.workflowStepText}>{kr ? w.kr : w.en}</span>
-                      {wi < section.workflow.length - 1 && <span className={styles.workflowArrow}>→</span>}
+              {/* Collapsible Content */}
+              <div className={`${styles.collapsibleContent} ${(!isMobile || expandedSections[section.id || si]) ? styles.expanded : ''}`}>
+                {/* Section-level Required Input (e.g., Structure Habitat) */}
+                {section.required && (
+                  <div className={styles.requiredRow} style={{ marginTop: 8, marginBottom: 12 }}>
+                    <span className={styles.requiredLabel}>{kr ? '필수 입력 시퀀스:' : 'Required Input:'}</span>
+                    <div className={styles.tags}>
+                      {section.required.map((r) => (
+                        <span key={r} className={styles.tag}>{r}</span>
+                      ))}
                     </div>
-                  ))}
-                </div>
-              )}
+                  </div>
+                )}
 
-              {/* Input Images (small) + Output Images (large) — for habitat-style sections */}
-              {section.inputImages && section.inputImages.length > 0 && (
-                <>
-                  <div className={styles.imageGridInput}>
-                    {section.inputImages.map((img, ii) => (
-                      <div key={ii} className={styles.imageCard}>
-                        <img src={img.src} alt={kr && img.labelKr ? img.labelKr : img.label} loading="lazy" />
-                        <p className={styles.imageLabel}>{kr && img.labelKr ? img.labelKr : img.label}</p>
+                {/* Workflow Steps */}
+                {section.workflow && (
+                  <div className={styles.workflowBar}>
+                    {section.workflow.map((w, wi) => (
+                      <div key={wi} className={styles.workflowStep}>
+                        <span className={styles.workflowStepNum}>STEP {w.step}</span>
+                        <span className={styles.workflowStepText}>{kr ? w.kr : w.en}</span>
+                        {wi < section.workflow.length - 1 && <span className={styles.workflowArrow}>→</span>}
                       </div>
                     ))}
                   </div>
-                  <p className={styles.imageGroupLabel}>{kr ? '분석 결과' : 'Output Results'}</p>
-                  <div className={section.outputImages.some(img => img.equalHeight) ? styles.imageGridEqualHeight : styles.imageGridLarge}>
-                    {section.outputImages.map((img, ii) => (
-                      <div key={ii} className={img.equalHeight ? styles.imageCardEqualHeight : styles.imageCard}>
-                        <img src={img.src} alt={kr && img.labelKr ? img.labelKr : img.label} loading="lazy" />
-                        <p className={styles.imageLabel}>{kr && img.labelKr ? img.labelKr : img.label}</p>
-                      </div>
-                    ))}
-                  </div>
-                </>
-              )}
+                )}
 
-              {/* Image Grid */}
-              {!section.inputImages && section.images && section.images.length > 0 && (() => {
-                const equalRow = section.images.filter(img => img.equalRow)
-                const normal = section.images.filter(img => !img.pairLarge && !img.large && !img.equalRow && !img.matchHeight)
-                const matchHeight = section.images.filter(img => img.matchHeight)
-                const largeItems = section.images.filter(img => img.large)
-                const pairLarge = section.images.filter(img => img.pairLarge)
-                return (
+                {/* Input Images (small) + Output Images (large) — for habitat-style sections */}
+                {section.inputImages && section.inputImages.length > 0 && (
                   <>
-                    {/* Equal row: images side-by-side with matching heights */}
-                    {equalRow.length > 0 && (
-                      <div className={styles.equalHeightRow}>
-                        {equalRow.map((img, ii) => (
-                          <div key={ii} className={styles.equalHeightCard} style={img.flex ? { flex: img.flex } : undefined}>
-                            <img src={img.src} alt={kr && img.labelKr ? img.labelKr : img.label} loading="lazy" />
-                            <p className={styles.imageLabel}>{kr && img.labelKr ? img.labelKr : img.label}</p>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                    {/* Normal + matchHeight images in one grid */}
-                    {(normal.length > 0 || matchHeight.length > 0) && (
-                      <div className={styles.imageGrid}>
-                        {normal.map((img, ii) => {
-                          // Stacked card (multiple images in one card)
-                          if (img.stacked && img.items) {
-                            return (
-                              <div key={ii} className={styles.imageCardStacked}>
-                                {img.items.map((sub, si) => (
-                                  <div key={si}>
-                                    <img src={sub.src} alt={kr && sub.labelKr ? sub.labelKr : sub.label} loading="lazy" />
-                                    <p className={styles.imageLabel}>{kr && sub.labelKr ? sub.labelKr : sub.label}</p>
-                                  </div>
-                                ))}
-                              </div>
-                            )
-                          }
-                          // Normal card
-                          return (
-                            <div key={ii} className={styles.imageCard}>
+                    <div className={styles.imageGridInput}>
+                      {section.inputImages.map((img, ii) => (
+                        <div key={ii} className={styles.imageCard}>
+                          <img src={img.src} alt={kr && img.labelKr ? img.labelKr : img.label} loading="lazy" />
+                          <p className={styles.imageLabel}>{kr && img.labelKr ? img.labelKr : img.label}</p>
+                        </div>
+                      ))}
+                    </div>
+                    <p className={styles.imageGroupLabel}>{kr ? '분석 결과' : 'Output Results'}</p>
+                    <div className={section.outputImages.some(img => img.equalHeight) ? styles.imageGridEqualHeight : styles.imageGridLarge}>
+                      {section.outputImages.map((img, ii) => (
+                        <div key={ii} className={img.equalHeight ? styles.imageCardEqualHeight : styles.imageCard}>
+                          <img src={img.src} alt={kr && img.labelKr ? img.labelKr : img.label} loading="lazy" />
+                          <p className={styles.imageLabel}>{kr && img.labelKr ? img.labelKr : img.label}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                )}
+
+                {/* Image Grid */}
+                {!section.inputImages && section.images && section.images.length > 0 && (() => {
+                  const equalRow = section.images.filter(img => img.equalRow)
+                  const normal = section.images.filter(img => !img.pairLarge && !img.large && !img.equalRow && !img.matchHeight)
+                  const matchHeight = section.images.filter(img => img.matchHeight)
+                  const largeItems = section.images.filter(img => img.large)
+                  const pairLarge = section.images.filter(img => img.pairLarge)
+                  return (
+                    <>
+                      {/* Equal row: images side-by-side with matching heights */}
+                      {equalRow.length > 0 && (
+                        <div className={styles.equalHeightRow}>
+                          {equalRow.map((img, ii) => (
+                            <div key={ii} className={styles.equalHeightCard} style={img.flex ? { flex: img.flex } : undefined}>
                               <img src={img.src} alt={kr && img.labelKr ? img.labelKr : img.label} loading="lazy" />
                               <p className={styles.imageLabel}>{kr && img.labelKr ? img.labelKr : img.label}</p>
                             </div>
-                          )
-                        })}
-                        {matchHeight.map((img, ii) => (
-                          <div key={`mh-${ii}`} className={styles.matchHeightCard}>
-                            <img src={img.src} alt={kr && img.labelKr ? img.labelKr : img.label} loading="lazy" />
-                            <p className={styles.imageLabel}>{kr && img.labelKr ? img.labelKr : img.label}</p>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                    {largeItems.length > 0 && largeItems.map((img, ii) => (
-                      <div key={`lg-${ii}`} className={styles.imageCardLarge} style={{ marginBottom: 20 }}>
-                        <img src={img.src} alt={kr && img.labelKr ? img.labelKr : img.label} loading="lazy" style={img.maxHeight ? { maxHeight: img.maxHeight } : undefined} />
-                        <p className={styles.imageLabel}>{kr && img.labelKr ? img.labelKr : img.label}</p>
+                          ))}
+                        </div>
+                      )}
+                      {/* Normal + matchHeight images in one grid */}
+                      {(normal.length > 0 || matchHeight.length > 0) && (
+                        <div className={styles.imageGrid}>
+                          {normal.map((img, ii) => {
+                            // Stacked card (multiple images in one card)
+                            if (img.stacked && img.items) {
+                              return (
+                                <div key={ii} className={styles.imageCardStacked}>
+                                  {img.items.map((sub, si) => (
+                                    <div key={si}>
+                                      <img src={sub.src} alt={kr && sub.labelKr ? sub.labelKr : sub.label} loading="lazy" />
+                                      <p className={styles.imageLabel}>{kr && sub.labelKr ? sub.labelKr : sub.label}</p>
+                                    </div>
+                                  ))}
+                                </div>
+                              )
+                            }
+                            // Normal card
+                            return (
+                              <div key={ii} className={styles.imageCard}>
+                                <img src={img.src} alt={kr && img.labelKr ? img.labelKr : img.label} loading="lazy" />
+                                <p className={styles.imageLabel}>{kr && img.labelKr ? img.labelKr : img.label}</p>
+                              </div>
+                            )
+                          })}
+                          {matchHeight.map((img, ii) => (
+                            <div key={`mh-${ii}`} className={styles.matchHeightCard}>
+                              <img src={img.src} alt={kr && img.labelKr ? img.labelKr : img.label} loading="lazy" />
+                              <p className={styles.imageLabel}>{kr && img.labelKr ? img.labelKr : img.label}</p>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      {largeItems.length > 0 && largeItems.map((img, ii) => (
+                        <div key={`lg-${ii}`} className={styles.imageCardLarge} style={{ marginBottom: 20 }}>
+                          <img src={img.src} alt={kr && img.labelKr ? img.labelKr : img.label} loading="lazy" style={img.maxHeight ? { maxHeight: img.maxHeight } : undefined} />
+                          <p className={styles.imageLabel}>{kr && img.labelKr ? img.labelKr : img.label}</p>
+                        </div>
+                      ))}
+                      {pairLarge.length > 0 && (
+                        <div className={styles.pairLargeRow}>
+                          {pairLarge.map((img, ii) => (
+                            <div key={ii} className={styles.imageCardLarge}>
+                              <img src={img.src} alt={kr && img.labelKr ? img.labelKr : img.label} loading="lazy" />
+                              <p className={styles.imageLabel}>{kr && img.labelKr ? img.labelKr : img.label}</p>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </>
+                  )
+                })()}
+
+                {/* Legend */}
+                {section.legend && (
+                  <div className={styles.legend}>
+                    {section.legend.map((l, li) => (
+                      <div key={li} className={styles.legendItem}>
+                        <span className={styles.legendBar} style={{ background: l.color }} />
+                        <div className={styles.legendText}>
+                          <span className={styles.legendLabel}>{kr && l.labelKr ? l.labelKr : l.label}</span>
+                          {l.detail && <span className={styles.legendDetail}>{kr && l.detailKr ? l.detailKr : l.detail}</span>}
+                        </div>
                       </div>
                     ))}
-                    {pairLarge.length > 0 && (
-                      <div className={styles.pairLargeRow}>
-                        {pairLarge.map((img, ii) => (
-                          <div key={ii} className={styles.imageCardLarge}>
-                            <img src={img.src} alt={kr && img.labelKr ? img.labelKr : img.label} loading="lazy" />
-                            <p className={styles.imageLabel}>{kr && img.labelKr ? img.labelKr : img.label}</p>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </>
-                )
-              })()}
-
-              {/* Legend */}
-              {section.legend && (
-                <div className={styles.legend}>
-                  {section.legend.map((l, li) => (
-                    <div key={li} className={styles.legendItem}>
-                      <span className={styles.legendBar} style={{ background: l.color }} />
-                      <div className={styles.legendText}>
-                        <span className={styles.legendLabel}>{kr && l.labelKr ? l.labelKr : l.label}</span>
-                        {l.detail && <span className={styles.legendDetail}>{kr && l.detailKr ? l.detailKr : l.detail}</span>}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {/* Key Points */}
-              {section.keyPoints && (
-                <div className={styles.keyPointsGrid}>
-                  {section.keyPoints.map((kp, ki) => (
-                    <div key={ki} className={styles.keyPoint}>
-                      <span className={styles.keyPointIcon}>›</span>
-                      <span>{kr ? kp.kr : kp.en}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {/* Evidence Box */}
-              {section.evidence && (
-                <div className={styles.evidenceBox}>
-                  <div className={styles.evidenceIcon}>📊</div>
-                  <div>
-                    <strong>{kr ? '임상 근거' : 'Clinical Evidence'}</strong>
-                    <p>{kr ? section.evidence.kr : section.evidence.en}</p>
                   </div>
-                </div>
-              )}
+                )}
 
-              {/* Patent Info */}
-              {section.patent && (
-                <div className={styles.patentBox}>
-                  <span className={styles.patentIcon}>📋</span>
-                  <span>{kr ? '특허 출원' : 'Patent Filed'}: {section.patent.title} ({section.patent.number})</span>
-                </div>
-              )}
+                {/* Key Points */}
+                {section.keyPoints && (
+                  <div className={styles.keyPointsGrid}>
+                    {section.keyPoints.map((kp, ki) => (
+                      <div key={ki} className={styles.keyPoint}>
+                        <span className={styles.keyPointIcon}>›</span>
+                        <span>{kr ? kp.kr : kp.en}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Evidence Box */}
+                {section.evidence && (
+                  <div className={styles.evidenceBox}>
+                    <div className={styles.evidenceIcon}>📊</div>
+                    <div>
+                      <strong>{kr ? '임상 근거' : 'Clinical Evidence'}</strong>
+                      <p>{kr ? section.evidence.kr : section.evidence.en}</p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Patent Info */}
+                {section.patent && (
+                  <div className={styles.patentBox}>
+                    <span className={styles.patentIcon}>📋</span>
+                    <span>{kr ? '특허 출원' : 'Patent Filed'}: {section.patent.title} ({section.patent.number})</span>
+                  </div>
+                )}
+              </div>
             </div>
           ))}
 

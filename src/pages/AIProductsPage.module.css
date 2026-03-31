@@ -219,38 +219,52 @@
 
 /* ── Specs Bar ── */
 .specsBar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
   margin-bottom: 40px;
-  padding: 20px 0;
+  padding: 24px 0;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
+@media (max-width: 1024px) {
+  .specsBar {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+}
 @media (max-width: 480px) {
   .specsBar {
+    grid-template-columns: repeat(2, 1fr);
     gap: 8px;
-    margin-bottom: 20px;
-    padding: 12px 0;
+    margin-bottom: 24px;
+    padding: 16px 0;
   }
   .specItem {
-    padding: 10px 14px;
-    min-width: 80px;
+    padding: 12px 10px;
+    min-width: 0;
   }
   .specValue {
-    font-size: 1rem;
+    font-size: 1.05rem;
   }
   .specLabel {
-    font-size: 0.68rem;
+    font-size: 0.72rem;
   }
 }
 .specItem {
   background: rgba(0, 255, 204, 0.06);
   border: 1px solid rgba(0, 255, 204, 0.15);
-  border-radius: 10px;
-  padding: 12px 20px;
+  border-radius: 12px;
+  padding: 16px 20px;
   text-align: center;
-  min-width: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: transform 0.2s;
+}
+.specItem:hover {
+  transform: translateY(-2px);
+  background: rgba(0, 255, 204, 0.08);
 }
 .specValue {
   font-size: 1.2rem;
@@ -325,6 +339,89 @@
   font-weight: 700;
   letter-spacing: 0.04em;
 }
+
+/* ── View Details Button ── */
+.viewDetailsBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 16px;
+  margin: 12px 0 24px;
+  background: rgba(0, 255, 204, 0.05);
+  border: 1px solid rgba(0, 255, 204, 0.2);
+  border-radius: 12px;
+  color: rgb(0, 255, 204);
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.viewDetailsBtn:hover {
+  background: rgba(0, 255, 204, 0.1);
+  border-color: rgba(0, 255, 204, 0.4);
+}
+
+.viewDetailsIcon {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  transition: transform 0.3s ease;
+}
+
+.viewDetailsIcon span {
+  position: absolute;
+  background: currentColor;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+/* Create a chevron/arrow with two spans */
+.viewDetailsIcon span:first-child {
+  width: 8px;
+  height: 2px;
+  top: 6px;
+  left: 0;
+  transform: rotate(45deg);
+}
+.viewDetailsIcon span:last-child {
+  width: 8px;
+  height: 2px;
+  top: 6px;
+  right: 0;
+  transform: rotate(-45deg);
+}
+
+.iconRotated {
+  transform: rotate(180deg);
+}
+
+/* ── Collapsible Content ── */
+.collapsibleContent {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  visibility: hidden;
+}
+
+.expanded {
+  max-height: 5000px; /* Large enough to fit content */
+  opacity: 1;
+  visibility: visible;
+  margin-top: 10px;
+}
+
+@media (min-width: 769px) {
+  .collapsibleContent {
+    max-height: none;
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
 .slideSectionDesc {
   font-size: 0.95rem;
   line-height: 1.8;
@@ -337,35 +434,70 @@
 /* ── Workflow Bar ── */
 .workflowBar {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  align-items: center;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
   margin-bottom: 24px;
   padding: 18px 20px;
   background: rgba(0, 255, 204, 0.04);
   border: 1px solid rgba(0, 255, 204, 0.12);
   border-radius: 12px;
-  overflow: visible;
 }
 .workflowStep {
   display: flex;
-  align-items: center;
-  gap: 8px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  position: relative;
+  width: 100%;
+}
+.workflowStep:not(:last-child)::after {
+  content: '↓';
+  display: block;
+  font-size: 1.2rem;
+  color: rgba(0, 255, 204, 0.3);
+  margin: 4px 0 4px 10px;
 }
 .workflowStepNum {
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   font-weight: 800;
   color: rgb(0, 255, 204);
   letter-spacing: 0.06em;
+  opacity: 0.8;
 }
 .workflowStepText {
-  font-size: 0.88rem;
-  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.95);
+  font-weight: 500;
+  line-height: 1.4;
 }
 .workflowArrow {
-  font-size: 1.2rem;
-  color: rgba(0, 255, 204, 0.5);
-  margin: 0 6px;
+  display: none; /* Hidden in vertical mobile layout */
+}
+
+@media (min-width: 769px) {
+  .workflowBar {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+  .workflowStep {
+    flex-direction: row;
+    width: auto;
+  }
+  .workflowStep:not(:last-child)::after {
+    display: none;
+  }
+  .workflowStepNum {
+    font-size: 0.7rem;
+  }
+  .workflowArrow {
+    display: inline;
+    font-size: 1.2rem;
+    color: rgba(0, 255, 204, 0.5);
+    margin: 0 6px;
+  }
 }
 
 /* ── Image Grid ── */

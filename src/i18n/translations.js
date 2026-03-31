@@ -141,6 +141,7 @@ export const translations = {
     platform: {
       portfolioTitle: 'AI Solution Portfolio',
       portfolioSubtitle: 'Covering 7 Disease Areas',
+      viewDetails: 'View Details',
     },
     contact: {
       title: 'Send a Message',
@@ -311,6 +312,7 @@ export const translations = {
     platform: {
       portfolioTitle: 'AI 솔루션 포트폴리오',
       portfolioSubtitle: '7개 질환 영역을 아우르는 AI 솔루션',
+      viewDetails: '상세 보기',
     },
     contact: {
       title: '문의하기',
