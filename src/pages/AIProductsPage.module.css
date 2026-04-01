@@ -1081,3 +1081,51 @@
 }
 
 /* ── Regulatory Notice Banner — Moved to separate component ── */
+
+/* ── Certification Section (CERCARE STROKE etc.) ── */
+.certSection {
+  margin-top: 48px;
+  padding: 40px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.certGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: flex-start;
+}
+
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.certCard {
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+  opacity: 0; /* Initial state for animation */
+  animation: slideUpFade 0.6s ease forwards;
+}
+
+@media (max-width: 768px) {
+  .certGrid {
+    gap: 8px;
+  }
+  .certCard {
+    padding: 6px 12px;
+    font-size: 0.75rem;
+  }
+}
