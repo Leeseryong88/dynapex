@@ -2,7 +2,6 @@ import { useLanguage } from '../context/LanguageContext'
 import { usePageMeta } from '../hooks/usePageMeta'
 import { translations } from '../i18n/translations'
 import Hero from '../components/home/Hero'
-import Milestones from '../components/home/Milestones'
 import UnmetNeed from '../components/home/UnmetNeed'
 import LatestNews from '../components/home/LatestNews'
 import Solutions from '../components/home/Solutions'
@@ -23,7 +22,6 @@ export default function HomePage() {
       <Hero t={t.hero} />
       <Solutions t={t.solutions} />
       <UnmetNeed t={t.unmet} />
-      <Milestones t={t.milestones} trustedBy={t.trustedBy} />
       <LatestNews />
     </>
   )

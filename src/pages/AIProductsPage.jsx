@@ -118,6 +118,28 @@ export default function AIProductsPage() {
                 )}
               </div>
               <p className={styles.productDesc}>{kr ? content.descKr : content.descEn}</p>
+              
+              {/* ── Certifications (Specifically for CERCARE STROKE etc.) ── */}
+              {activeTab === 'stroke' && (
+                <div className={styles.certSection} style={{ marginTop: 0, marginBottom: 20, borderTop: 'none', padding: 0 }}>
+                  <div className={styles.certGrid}>
+                    {[
+                      { kr: '한국 식품의약품안전처 (MFDS) 인증', en: 'Korea MFDS Clearance' },
+                      { kr: '미국 FDA 510(k) Clearance', en: 'USA FDA 510(k) Clearance' },
+                      { kr: '유럽 CE MDD 인증', en: 'Europe CE MDD Certification' }
+                    ].map((cert, idx) => (
+                      <div 
+                        key={idx} 
+                        className={styles.certCard}
+                        style={{ animationDelay: `${idx * 0.1}s` }}
+                      >
+                        {kr ? cert.kr : cert.en}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {content.required && (
                 <div className={styles.requiredRow}>
                   <span className={styles.requiredLabel}>{kr ? '필수 입력 시퀀스:' : 'Required Input:'}</span>
@@ -140,30 +162,6 @@ export default function AIProductsPage() {
                   <span className={styles.specLabel}>{kr && s.labelKr ? s.labelKr : s.label}</span>
                 </div>
               ))}
-            </div>
-          )}
-
-          {/* ── Certifications (Specifically for CERCARE STROKE etc.) ── */}
-          {activeTab === 'stroke' && (
-            <div className={styles.certSection} style={{ marginTop: 0, marginBottom: 40, borderTop: 'none' }}>
-              <div className={styles.certGrid}>
-                {[
-                  { kr: '한국 식품의약품안전처 (MFDS) 인증', en: 'Korea MFDS Clearance' },
-                  { kr: '미국 FDA 510(k) Clearance', en: 'USA FDA 510(k) Clearance' },
-                  { kr: '일본 MHLW 인증', en: 'Japan MHLW Clearance' },
-                  { kr: '유럽 CE MDD 인증', en: 'Europe CE MDD Certification' },
-                  { kr: '싱가포르 HSA 인증', en: 'Singapore HSA Clearance' },
-                  { kr: '태국 TFDA 인증', en: 'Thailand TFDA Clearance' }
-                ].map((cert, idx) => (
-                  <div 
-                    key={idx} 
-                    className={styles.certCard}
-                    style={{ animationDelay: `${idx * 0.1}s` }}
-                  >
-                    {kr ? cert.kr : cert.en}
-                  </div>
-                ))}
-              </div>
             </div>
           )}
 

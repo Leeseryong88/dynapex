@@ -53,9 +53,16 @@ export default function Hero({ t }) {
 
     const parseStat = (value) => {
       const str = String(value ?? '0')
+      // 숫자가 포함되어 있는지 확인 (소수점 포함)
+      const hasNumber = /[0-9]/.test(str)
+      
+      if (!hasNumber) {
+        return { isNumeric: false, final: str }
+      }
+
       const numeric = parseFloat(str.replace(/,/g, '').replace(/[^0-9.]/g, ''))
       const suffix = str.replace(/[0-9.,]/g, '')
-      return { target: Number.isNaN(numeric) ? 0 : numeric, suffix }
+      return { isNumeric: true, target: Number.isNaN(numeric) ? 0 : numeric, suffix, final: str }
     }
 
     const metrics = siteStats?.metrics || {}
@@ -66,6 +73,17 @@ export default function Hero({ t }) {
       reduction: parseStat(metrics.reduction?.value),
     }
 
+    // 숫자가 아닌 항목들은 즉시 표시 처리
+    const initialDisplay = {}
+    Object.keys(parsed).forEach(key => {
+      if (!parsed[key].isNumeric) {
+        initialDisplay[key] = parsed[key].final
+      } else {
+        initialDisplay[key] = '0' + parsed[key].suffix
+      }
+    })
+    setDisplayStats(prev => ({ ...prev, ...initialDisplay }))
+
     const start = performance.now()
     const duration = 1800
     let rafId = null
@@ -74,12 +92,17 @@ export default function Hero({ t }) {
 
     const tick = (now) => {
       const progress = Math.min((now - start) / duration, 1)
-      setDisplayStats({
-        countries: `${format(parsed.countries.target * progress)}${parsed.countries.suffix}`,
-        institutions: `${format(parsed.institutions.target * progress)}${parsed.institutions.suffix}`,
-        scans: `${format(parsed.scans.target * progress)}${parsed.scans.suffix}`,
-        reduction: `${format(parsed.reduction.target * progress)}${parsed.reduction.suffix}`,
+      const nextStats = {}
+      
+      Object.keys(parsed).forEach(key => {
+        if (parsed[key].isNumeric) {
+          nextStats[key] = `${format(parsed[key].target * progress)}${parsed[key].suffix}`
+        } else {
+          nextStats[key] = parsed[key].final
+        }
       })
+
+      setDisplayStats(nextStats)
       if (progress < 1) rafId = requestAnimationFrame(tick)
     }
 
@@ -313,49 +336,64 @@ export default function Hero({ t }) {
           </button>
 
           {statsReady && (
-            <div
-              style={{
-                marginTop: 28,
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
-                gap: 18,
-                width: 'min(920px, 95vw)',
-              }}
-            >
-              {[
-                { key: 'countries' },
-                { key: 'institutions' },
-                { key: 'scans' },
-                { key: 'reduction' },
-              ]
-                .filter((item) => siteStats?.metrics?.[item.key]?.enabled !== false)
-                .map((item) => (
-                  <div key={item.key} style={{ textAlign: 'center' }}>
-                    <div
-                      style={{
-                        fontSize: 'clamp(1.8rem, 4vw, 3.2rem)',
-                        fontWeight: 800,
-                        lineHeight: 1.05,
-                        color: '#fff',
-                        textShadow: '0 2px 14px rgba(0,0,0,0.45)',
-                      }}
-                    >
-                      {displayStats[item.key]}
+            <div style={{ marginTop: 40, width: 'min(920px, 95vw)' }}>
+              <div
+                style={{
+                  fontSize: 'clamp(1.4rem, 3.5vw, 2.2rem)',
+                  fontWeight: 900,
+                  color: 'var(--color-accent)',
+                  letterSpacing: '0.05em',
+                  textTransform: 'uppercase',
+                  marginBottom: 32,
+                  opacity: 1,
+                  textAlign: 'center',
+                  textShadow: '0 0 30px rgba(0,255,204,0.4)'
+                }}
+              >
+                DYNAPEX by the Numbers
+              </div>
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
+                  gap: 18,
+                }}
+              >
+                {[
+                  { key: 'countries' },
+                  { key: 'institutions' },
+                  { key: 'scans' },
+                  { key: 'reduction' },
+                ]
+                  .filter((item) => siteStats?.metrics?.[item.key]?.enabled !== false)
+                  .map((item) => (
+                    <div key={item.key} style={{ textAlign: 'center' }}>
+                      <div
+                        style={{
+                          fontSize: 'clamp(1.8rem, 4vw, 3.2rem)',
+                          fontWeight: 800,
+                          lineHeight: 1.05,
+                          color: siteStats?.metrics?.[item.key]?.color || '#fff',
+                          textShadow: '0 2px 14px rgba(0,0,0,0.45)',
+                        }}
+                      >
+                        {displayStats[item.key]}
+                      </div>
+                      <div
+                        style={{
+                          marginTop: 6,
+                          fontSize: '0.82rem',
+                          color: 'rgba(255,255,255,0.75)',
+                          fontWeight: 600,
+                        }}
+                      >
+                        {lang === 'kr'
+                          ? (siteStats?.metrics?.[item.key]?.labelKr || '')
+                          : (siteStats?.metrics?.[item.key]?.labelEn || '')}
+                      </div>
                     </div>
-                    <div
-                      style={{
-                        marginTop: 6,
-                        fontSize: '0.82rem',
-                        color: 'rgba(255,255,255,0.75)',
-                        fontWeight: 600,
-                      }}
-                    >
-                      {lang === 'kr'
-                        ? (siteStats?.metrics?.[item.key]?.labelKr || '')
-                        : (siteStats?.metrics?.[item.key]?.labelEn || '')}
-                    </div>
-                  </div>
-                ))}
+                  ))}
+              </div>
             </div>
           )}
         </div>

@@ -9,10 +9,10 @@ const checkboxLabelStyle = { display: 'flex', alignItems: 'center', gap: 8, font
 
 const defaultSiteStats = {
   metrics: {
-    countries: { value: '40+', labelKr: '국가', labelEn: 'Countries', enabled: true },
-    institutions: { value: '1,500+', labelKr: '기관', labelEn: 'Institutions', enabled: true },
-    scans: { value: '7M+', labelKr: '분석 건수', labelEn: 'Scans', enabled: true },
-    reduction: { value: '45%', labelKr: '평균 검사시간 단축', labelEn: 'Avg scan time reduction', enabled: true },
+    countries: { value: '40+', labelKr: '국가', labelEn: 'Countries', enabled: true, color: '#ffffff' },
+    institutions: { value: '1,500+', labelKr: '기관', labelEn: 'Institutions', enabled: true, color: '#ffffff' },
+    scans: { value: '7M+', labelKr: '분석 건수', labelEn: 'Scans', enabled: true, color: '#ffffff' },
+    reduction: { value: '45%', labelKr: '평균 검사시간 단축', labelEn: 'Avg scan time reduction', enabled: true, color: '#ffffff' },
   },
 }
 
@@ -112,7 +112,7 @@ export default function AdminDashboard() {
 
         {/* Site Stats (Trusted By) Editor */}
         <div style={card}>
-          <h2 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: 16 }}>Trusted By Metrics</h2>
+          <h2 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: 16 }}>DYNAPEX by the Numbers</h2>
           <form onSubmit={handleSaveStats}>
             {metricOrder.map((metric) => {
               const data = siteStats?.metrics?.[metric.key] || {}
@@ -152,6 +152,17 @@ export default function AdminDashboard() {
                     value={data.labelEn || ''}
                     onChange={(e) => updateMetricField(metric.key, 'labelEn', e.target.value)}
                   />
+
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 4 }}>
+                    <label style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.4)' }}>표시 색상:</label>
+                    <input
+                      type="color"
+                      style={{ border: 'none', width: 30, height: 30, background: 'none', cursor: 'pointer' }}
+                      value={data.color || '#ffffff'}
+                      onChange={(e) => updateMetricField(metric.key, 'color', e.target.value)}
+                    />
+                    <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.6)', fontFamily: 'monospace' }}>{data.color || '#ffffff'}</span>
+                  </div>
                 </div>
               )
             })}
