@@ -117,8 +117,7 @@ export default function AIProductsPage() {
                   <span className={styles.productSubtitle}>{kr ? content.subtitleKr : content.subtitle}</span>
                 )}
               </div>
-              <p className={styles.productDesc}>{kr ? content.descKr : content.descEn}</p>
-              
+
               {/* ── Certifications (Specifically for CERCARE STROKE etc.) ── */}
               {activeTab === 'stroke' && (
                 <div className={styles.certSection} style={{ marginTop: 0, marginBottom: 20, borderTop: 'none', padding: 0 }}>
@@ -139,6 +138,8 @@ export default function AIProductsPage() {
                   </div>
                 </div>
               )}
+
+              <p className={styles.productDesc}>{kr ? content.descKr : content.descEn}</p>
 
               {content.required && (
                 <div className={styles.requiredRow}>
