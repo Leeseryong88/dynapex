@@ -36,6 +36,12 @@ export default function Header() {
             </Link>
           </h1>
 
+          <div className={styles.mobileLangWrap}>
+            <button type="button" className={styles.langBtn} onClick={toggleLang} aria-label="Language">
+              {lang === 'en' ? 'EN' : 'KR'}
+            </button>
+          </div>
+          
           {/* ── Desktop Navigation ── */}
           <nav className={styles.nav} aria-label="Main navigation">
             <Link

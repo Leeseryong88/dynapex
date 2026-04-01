@@ -168,6 +168,10 @@
   opacity: 0.8;
 }
 
+.mobileLangWrap {
+  display: none;
+}
+
 /* Product items — 4-column wide grid */
 .productsGrid {
   display: grid;
@@ -381,6 +385,12 @@
 
   .burger {
     display: flex;
+  }
+
+  .mobileLangWrap {
+    display: block;
+    margin-left: auto;
+    margin-right: 12px;
   }
 
   .mobileNav {
