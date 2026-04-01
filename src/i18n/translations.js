@@ -37,6 +37,14 @@ export const translations = {
         { id: 'pd', name: 'DYNAPEX PD', desc: "Parkinson's Disease neuromelanin and substantia nigra quantitative analysis", icon: '🧬' },
       ],
     },
+    trustedStats: {
+      title: 'Smarter MRI, from end to end',
+      subtitle: 'Higher efficiency. Sharper images. Deeper insights.',
+      countries: 'Countries',
+      institutions: 'Institutions',
+      scans: 'Scans',
+      reduction: 'Avg scan time reduction',
+    },
     trustedBy: {
       kicker: 'Trusted By',
       title: 'Trusted By',
@@ -209,6 +217,14 @@ export const translations = {
         { id: 'ms', name: 'DYNAPEX MS', desc: '다발성 경화증 병변 검출·체적 분석·종적 추적', icon: '🔬' },
         { id: 'pd', name: 'DYNAPEX PD', desc: '파킨슨병 neuromelanin 및 흑질 정량 분석', icon: '🧬' },
       ],
+    },
+    trustedStats: {
+      title: '더 똑똑한 MRI, 처음부터 끝까지',
+      subtitle: '더 높은 효율성. 더 선명한 이미지. 더 깊은 통찰력.',
+      countries: '국가',
+      institutions: '기관',
+      scans: '분석 건수',
+      reduction: '평균 검사 시간 단축',
     },
     trustedBy: {
       kicker: '도입 병원',

@@ -1,18 +1,70 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { getPosts } from '../../firebase/firestore'
+import { getPosts, updateSiteStats, getSiteStats } from '../../firebase/firestore'
 import { getPubStats } from '../../firebase/firestore'
 
 const card = { background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, padding: '24px 28px' }
+const inputStyle = { width: '100%', padding: '10px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, color: '#fff', fontSize: '0.9rem', marginBottom: 12 }
+const checkboxLabelStyle = { display: 'flex', alignItems: 'center', gap: 8, fontSize: '0.8rem', color: 'rgba(255,255,255,0.72)', marginBottom: 8 }
+
+const defaultSiteStats = {
+  metrics: {
+    countries: { value: '40+', labelKr: '국가', labelEn: 'Countries', enabled: true },
+    institutions: { value: '1,500+', labelKr: '기관', labelEn: 'Institutions', enabled: true },
+    scans: { value: '7M+', labelKr: '분석 건수', labelEn: 'Scans', enabled: true },
+    reduction: { value: '45%', labelKr: '평균 검사시간 단축', labelEn: 'Avg scan time reduction', enabled: true },
+  },
+}
+
+const metricOrder = [
+  { key: 'countries', title: 'Metric 1' },
+  { key: 'institutions', title: 'Metric 2' },
+  { key: 'scans', title: 'Metric 3' },
+  { key: 'reduction', title: 'Metric 4' },
+]
 
 export default function AdminDashboard() {
   const [recentPosts, setRecentPosts] = useState([])
   const [stats, setStats] = useState(null)
+  const [siteStats, setSiteStats] = useState(defaultSiteStats)
+  const [saving, setSaving] = useState(false)
 
   useEffect(() => {
     getPosts({ pageSize: 5, publishedOnly: false }).then(r => setRecentPosts(r.docs)).catch(() => {})
     getPubStats().then(setStats).catch(() => {})
+    getSiteStats().then(setSiteStats).catch(() => {})
   }, [])
+
+  const handleSaveStats = async (e) => {
+    e.preventDefault()
+    setSaving(true)
+    try {
+      await updateSiteStats(siteStats)
+      // Success: Reload to see changes
+      alert('Stats updated successfully!')
+      // Optional: Refresh local state from firestore again
+      const updated = await getSiteStats()
+      setSiteStats(updated)
+    } catch (err) {
+      console.error(err)
+      alert('Failed to update stats: ' + err.message)
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const updateMetricField = (metricKey, field, value) => {
+    setSiteStats((prev) => ({
+      ...prev,
+      metrics: {
+        ...prev.metrics,
+        [metricKey]: {
+          ...(prev.metrics?.[metricKey] || {}),
+          [field]: value,
+        },
+      },
+    }))
+  }
 
   return (
     <div>
@@ -34,27 +86,88 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* Recent Posts */}
-      <div style={{ ...card, marginBottom: 24 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-          <h2 style={{ fontSize: '1rem', fontWeight: 700, margin: 0 }}>Recent Posts</h2>
-          <Link to="/admin/posts" style={{ color: 'rgb(0,255,204)', fontSize: '0.82rem', textDecoration: 'none' }}>View All &rarr;</Link>
-        </div>
-        {recentPosts.length === 0 ? (
-          <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '0.88rem' }}>No posts yet. Create your first post.</p>
-        ) : (
-          recentPosts.map(post => (
-            <div key={post.id} style={{ padding: '10px 0', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div>
-                <span style={{ fontSize: '0.88rem' }}>{post.title}</span>
-                <span style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.35)', marginLeft: 12 }}>{post.category}</span>
+      <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: 24, marginBottom: 24 }}>
+        {/* Recent Posts */}
+        <div style={card}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+            <h2 style={{ fontSize: '1rem', fontWeight: 700, margin: 0 }}>Recent Posts</h2>
+            <Link to="/admin/posts" style={{ color: 'rgb(0,255,204)', fontSize: '0.82rem', textDecoration: 'none' }}>View All &rarr;</Link>
+          </div>
+          {recentPosts.length === 0 ? (
+            <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '0.88rem' }}>No posts yet. Create your first post.</p>
+          ) : (
+            recentPosts.map(post => (
+              <div key={post.id} style={{ padding: '10px 0', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div>
+                  <span style={{ fontSize: '0.88rem' }}>{post.title}</span>
+                  <span style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.35)', marginLeft: 12 }}>{post.category}</span>
+                </div>
+                <span style={{ fontSize: '0.72rem', color: post.published ? 'rgb(0,255,204)' : 'rgba(255,100,100,0.8)' }}>
+                  {post.published ? 'Published' : 'Draft'}
+                </span>
               </div>
-              <span style={{ fontSize: '0.72rem', color: post.published ? 'rgb(0,255,204)' : 'rgba(255,100,100,0.8)' }}>
-                {post.published ? 'Published' : 'Draft'}
-              </span>
-            </div>
-          ))
-        )}
+            ))
+          )}
+        </div>
+
+        {/* Site Stats (Trusted By) Editor */}
+        <div style={card}>
+          <h2 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: 16 }}>Trusted By Metrics</h2>
+          <form onSubmit={handleSaveStats}>
+            {metricOrder.map((metric) => {
+              const data = siteStats?.metrics?.[metric.key] || {}
+              return (
+                <div key={metric.key} style={{ marginBottom: 14, padding: 12, border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10 }}>
+                  <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)', marginBottom: 8 }}>{metric.title}</div>
+
+                  <label style={checkboxLabelStyle}>
+                    <input
+                      type="checkbox"
+                      checked={data.enabled !== false}
+                      onChange={(e) => updateMetricField(metric.key, 'enabled', e.target.checked)}
+                    />
+                    랜딩페이지에 표시
+                  </label>
+
+                  <label style={{ display: 'block', fontSize: '0.75rem', color: 'rgba(255,255,255,0.4)', marginBottom: 4 }}>값 (예: 40+, 1,500+, 7M+, 45%)</label>
+                  <input
+                    type="text"
+                    style={inputStyle}
+                    value={data.value || ''}
+                    onChange={(e) => updateMetricField(metric.key, 'value', e.target.value)}
+                  />
+
+                  <label style={{ display: 'block', fontSize: '0.75rem', color: 'rgba(255,255,255,0.4)', marginBottom: 4 }}>한글 명칭</label>
+                  <input
+                    type="text"
+                    style={inputStyle}
+                    value={data.labelKr || ''}
+                    onChange={(e) => updateMetricField(metric.key, 'labelKr', e.target.value)}
+                  />
+
+                  <label style={{ display: 'block', fontSize: '0.75rem', color: 'rgba(255,255,255,0.4)', marginBottom: 4 }}>영문 명칭</label>
+                  <input
+                    type="text"
+                    style={inputStyle}
+                    value={data.labelEn || ''}
+                    onChange={(e) => updateMetricField(metric.key, 'labelEn', e.target.value)}
+                  />
+                </div>
+              )
+            })}
+            <button 
+              type="submit" 
+              disabled={saving}
+              style={{ 
+                width: '100%', padding: '10px', background: 'rgb(0,255,204)', color: '#0a1628', 
+                border: 'none', borderRadius: 8, fontSize: '0.85rem', fontWeight: 700, cursor: 'pointer',
+                opacity: saving ? 0.7 : 1
+              }}
+            >
+              {saving ? 'Saving...' : 'Save Metrics'}
+            </button>
+          </form>
+        </div>
       </div>
 
       {/* Quick Links */}

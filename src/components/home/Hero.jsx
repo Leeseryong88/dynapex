@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { useLanguage } from '../../context/LanguageContext'
 import { useState, useEffect } from 'react'
+import { getSiteStats } from '../../firebase/firestore'
 
 const rotatingTerms = {
   KR: ['교모세포종', '뇌전이', '다발성경화증', '파킨슨병', '뇌졸중'],
@@ -12,8 +13,16 @@ export default function Hero({ t }) {
   const { lang } = useLanguage()
   const [currentTermIndex, setCurrentTermIndex] = useState(0)
   const [fadeOut, setFadeOut] = useState(false)
+  const [siteStats, setSiteStats] = useState(null)
+  const [statsReady, setStatsReady] = useState(false)
+  const [displayStats, setDisplayStats] = useState({
+    countries: '0',
+    institutions: '0',
+    scans: '0',
+    reduction: '0',
+  })
 
-  const langKey = lang === 'ko' ? 'KR' : 'EN'
+  const langKey = lang === 'kr' ? 'KR' : 'EN'
   const currentTerm = rotatingTerms[langKey][currentTermIndex]
 
   // Rotate terms every 2.5 seconds
@@ -29,6 +38,56 @@ export default function Hero({ t }) {
       clearTimeout(rotateTimer)
     }
   }, [currentTermIndex, langKey])
+
+  useEffect(() => {
+    getSiteStats()
+      .then((data) => {
+        if (data) setSiteStats(data)
+      })
+      .catch(() => {})
+      .finally(() => setStatsReady(true))
+  }, [])
+
+  useEffect(() => {
+    if (!siteStats?.metrics) return
+
+    const parseStat = (value) => {
+      const str = String(value ?? '0')
+      const numeric = parseFloat(str.replace(/,/g, '').replace(/[^0-9.]/g, ''))
+      const suffix = str.replace(/[0-9.,]/g, '')
+      return { target: Number.isNaN(numeric) ? 0 : numeric, suffix }
+    }
+
+    const metrics = siteStats?.metrics || {}
+    const parsed = {
+      countries: parseStat(metrics.countries?.value),
+      institutions: parseStat(metrics.institutions?.value),
+      scans: parseStat(metrics.scans?.value),
+      reduction: parseStat(metrics.reduction?.value),
+    }
+
+    const start = performance.now()
+    const duration = 1800
+    let rafId = null
+
+    const format = (num) => Math.floor(num).toLocaleString()
+
+    const tick = (now) => {
+      const progress = Math.min((now - start) / duration, 1)
+      setDisplayStats({
+        countries: `${format(parsed.countries.target * progress)}${parsed.countries.suffix}`,
+        institutions: `${format(parsed.institutions.target * progress)}${parsed.institutions.suffix}`,
+        scans: `${format(parsed.scans.target * progress)}${parsed.scans.suffix}`,
+        reduction: `${format(parsed.reduction.target * progress)}${parsed.reduction.suffix}`,
+      })
+      if (progress < 1) rafId = requestAnimationFrame(tick)
+    }
+
+    rafId = requestAnimationFrame(tick)
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId)
+    }
+  }, [siteStats])
 
   // CSS for fade animation and mobile optimization
   const fadeStyles = `
@@ -252,6 +311,53 @@ export default function Hero({ t }) {
           >
             {t.cta}
           </button>
+
+          {statsReady && (
+            <div
+              style={{
+                marginTop: 28,
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
+                gap: 18,
+                width: 'min(920px, 95vw)',
+              }}
+            >
+              {[
+                { key: 'countries' },
+                { key: 'institutions' },
+                { key: 'scans' },
+                { key: 'reduction' },
+              ]
+                .filter((item) => siteStats?.metrics?.[item.key]?.enabled !== false)
+                .map((item) => (
+                  <div key={item.key} style={{ textAlign: 'center' }}>
+                    <div
+                      style={{
+                        fontSize: 'clamp(1.8rem, 4vw, 3.2rem)',
+                        fontWeight: 800,
+                        lineHeight: 1.05,
+                        color: '#fff',
+                        textShadow: '0 2px 14px rgba(0,0,0,0.45)',
+                      }}
+                    >
+                      {displayStats[item.key]}
+                    </div>
+                    <div
+                      style={{
+                        marginTop: 6,
+                        fontSize: '0.82rem',
+                        color: 'rgba(255,255,255,0.75)',
+                        fontWeight: 600,
+                      }}
+                    >
+                      {lang === 'kr'
+                        ? (siteStats?.metrics?.[item.key]?.labelKr || '')
+                        : (siteStats?.metrics?.[item.key]?.labelEn || '')}
+                    </div>
+                  </div>
+                ))}
+            </div>
+          )}
         </div>
       </div>
 

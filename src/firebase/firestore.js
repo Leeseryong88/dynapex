@@ -1,5 +1,5 @@
 import {
-  collection, doc, getDocs, getDoc, addDoc, updateDoc, deleteDoc,
+  collection, doc, getDocs, getDoc, addDoc, updateDoc, deleteDoc, setDoc,
   query, where, orderBy, limit, startAfter, serverTimestamp, increment
 } from 'firebase/firestore'
 import { db } from './config'
@@ -93,4 +93,63 @@ export async function getPubStats() {
 
 export async function updatePubStats(data) {
   return updateDoc(doc(db, 'settings', 'pubStats'), data)
+}
+
+// ═══ Site Stats (Trusted By) ═══
+
+const defaultSiteStats = {
+  metrics: {
+    countries: { value: '40+', labelKr: '국가', labelEn: 'Countries', enabled: true },
+    institutions: { value: '1,500+', labelKr: '기관', labelEn: 'Institutions', enabled: true },
+    scans: { value: '7M+', labelKr: '분석 건수', labelEn: 'Scans', enabled: true },
+    reduction: { value: '45%', labelKr: '평균 검사시간 단축', labelEn: 'Avg scan time reduction', enabled: true },
+  },
+}
+
+function normalizeSiteStats(raw) {
+  if (!raw || typeof raw !== 'object') return defaultSiteStats
+
+  // New schema
+  if (raw.metrics && typeof raw.metrics === 'object') {
+    return {
+      metrics: {
+        countries: { ...defaultSiteStats.metrics.countries, ...(raw.metrics.countries || {}) },
+        institutions: { ...defaultSiteStats.metrics.institutions, ...(raw.metrics.institutions || {}) },
+        scans: { ...defaultSiteStats.metrics.scans, ...(raw.metrics.scans || {}) },
+        reduction: { ...defaultSiteStats.metrics.reduction, ...(raw.metrics.reduction || {}) },
+      },
+    }
+  }
+
+  // Backward compatibility for old flat schema
+  return {
+    metrics: {
+      countries: {
+        ...defaultSiteStats.metrics.countries,
+        value: raw.countries ?? defaultSiteStats.metrics.countries.value,
+      },
+      institutions: {
+        ...defaultSiteStats.metrics.institutions,
+        value: raw.institutions ?? defaultSiteStats.metrics.institutions.value,
+      },
+      scans: {
+        ...defaultSiteStats.metrics.scans,
+        value: raw.scans ?? defaultSiteStats.metrics.scans.value,
+      },
+      reduction: {
+        ...defaultSiteStats.metrics.reduction,
+        value: raw.reduction ?? defaultSiteStats.metrics.reduction.value,
+      },
+    },
+  }
+}
+
+export async function getSiteStats() {
+  const snap = await getDoc(doc(db, 'settings', 'siteStats'))
+  return normalizeSiteStats(snap.exists() ? snap.data() : null)
+}
+
+export async function updateSiteStats(data) {
+  const ref = doc(db, 'settings', 'siteStats')
+  return setDoc(ref, data, { merge: true })
 }
